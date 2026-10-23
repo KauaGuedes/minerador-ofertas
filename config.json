@@ -25,7 +25,7 @@
     ]
   },
   "rolagensPorBusca": 6,
-  "maxAnunciantesParaContar": 120,
+  "maxAnunciantesParaContar": 160,
   "minAnunciosNaBuscaParaContar": 1,
   "ignorarPaginasComMaisDeCurtidas": 3000000
 }

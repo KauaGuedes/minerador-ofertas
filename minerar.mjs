@@ -3,6 +3,7 @@
 // guarda só anúncios com destino WhatsApp, agrupa por anunciante e conta os anúncios ativos.
 import { chromium } from 'playwright';
 import fs from 'node:fs';
+import { classificaConcorrencia, CONC } from './concorrencia.mjs';
 
 const CONFIG = JSON.parse(fs.readFileSync(new URL('./config.json', import.meta.url)));
 const ARQ_DADOS = new URL('./data/ofertas.json', import.meta.url);
@@ -94,11 +95,16 @@ async function main() {
   const log = { data: new Date().toISOString(), buscas: [], erros: [], bloqueado: false };
   const anunciantes = new Map(); // page_id -> dados
 
-  // 1) Buscas por palavra-chave
+  // 1) Buscas por palavra-chave: as gerais (todos, vídeo e imagem) e as de concorrentes das nossas ofertas
+  const buscas = [];
   for (const [pais, palavras] of Object.entries(CONFIG.paises)) {
-    const lista = SO_TESTE ? palavras.slice(0, 2) : palavras;
-    const tipos = SO_TESTE ? ['all'] : ['all', 'video', 'image'];
-    for (const palavra of lista) for (const tipo of tipos) {
+    for (const palavra of SO_TESTE ? palavras.slice(0, 2) : palavras)
+      for (const tipo of SO_TESTE ? ['all'] : ['all', 'video', 'image']) buscas.push({ pais, palavra, tipo });
+  }
+  for (const o of SO_TESTE ? [] : CONC) for (const pais of o.paises || ['BR'])
+    for (const palavra of o.buscas || []) buscas.push({ pais, palavra, tipo: 'all', conc: o.id });
+  {
+    for (const { pais, palavra, tipo, conc } of buscas) {
       const url = `https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=${pais}` +
         `&q=${encodeURIComponent(palavra)}&search_type=keyword_unordered&media_type=${tipo}`;
       try {
@@ -116,7 +122,7 @@ async function main() {
         aba.parar();
         const ads = [...extraiAnuncios(html), ...aba.respostas.flatMap(extraiAnuncios)];
         const zap = ads.filter(ehWhatsApp);
-        log.buscas.push({ pais, palavra, tipo, status: aba.status, anuncios: ads.length, whatsapp: zap.length });
+        log.buscas.push({ pais, palavra, tipo, conc, status: aba.status, anuncios: ads.length, whatsapp: zap.length });
         if (ads.length === 0 && /login|checkpoint/i.test(page.url())) log.bloqueado = true;
 
         for (const ad of zap) {
@@ -127,11 +133,11 @@ async function main() {
             anunciantes.set(id, {
               page_id: id, pagina: ad.page_name || s.page_name, perfil: s.page_profile_uri,
               foto: s.page_profile_picture_url, curtidas: s.page_like_count, categorias: s.page_categories,
-              paises: new Set(), palavras: new Set(), anuncios: new Map(),
+              paises: new Set(), palavras: new Set(), anuncios: new Map(), porBusca: new Set(),
             });
           }
           const a = anunciantes.get(id);
-          a.paises.add(pais); a.palavras.add(palavra);
+          a.paises.add(pais); a.palavras.add(palavra); if (conc) a.porBusca.add(conc);
           if (!a.anuncios.has(ad.ad_archive_id)) a.anuncios.set(ad.ad_archive_id, resumoAnuncio(ad));
         }
       } catch (e) { log.erros.push(`${pais} "${palavra}" ${tipo}: ${e.message}`); }
@@ -141,7 +147,7 @@ async function main() {
 
   // 2) Total de anúncios ativos de cada anunciante (página dele na Biblioteca)
   const ordem = [...anunciantes.values()]
-    .sort((x, y) => Math.max(...[...y.anuncios.values()].map((v) => v.duplicado)) - Math.max(...[...x.anuncios.values()].map((v) => v.duplicado)))
+    .sort((x, y) => (y.porBusca.size ? 1 : 0) - (x.porBusca.size ? 1 : 0) || Math.max(...[...y.anuncios.values()].map((v) => v.duplicado)) - Math.max(...[...x.anuncios.values()].map((v) => v.duplicado)))
     .slice(0, SO_TESTE ? 10 : CONFIG.maxAnunciantesParaContar);
   for (const a of ordem) {
     try {
@@ -177,6 +183,7 @@ async function main() {
       ativos: a.ativos ?? velho.ativos ?? null,
       anuncio_mais_antigo: inicios[0] || velho.anuncio_mais_antigo || null,
       maior_duplicacao: Math.max(0, ...anuncios.map((v) => v.duplicado)),
+      ...classificaConcorrencia(anuncios, [...a.porBusca]),
       anuncios: anuncios.slice(0, 15),
       primeira_vez: velho.primeira_vez || hoje,
       ultima_vez: hoje,

@@ -40,8 +40,13 @@ svg.i{width:16px;height:16px;flex:none;stroke:currentColor;fill:none;stroke-widt
 /* topo */
 .top{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap}
 .brandline{display:flex;align-items:center;gap:10px;color:var(--soft);font-weight:600;font-size:13px}
-.logo{width:30px;height:30px;border-radius:9px;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center}
-.logo svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.4}
+.vk{display:flex;align-items:center;gap:10px}
+.vk img{height:26px;width:auto;display:block;filter:drop-shadow(0 0 12px rgba(255,255,255,.16))}
+.vk .wm{font-family:var(--f-big);font-weight:700;font-size:14px;letter-spacing:.04em;color:var(--fg)}
+.vk .wm em{font-style:normal;font-weight:500;color:var(--soft);letter-spacing:.14em;font-size:11px}
+.vk .sep{width:1px;height:18px;background:var(--edge-2)}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]) .vk img{filter:invert(1)} }
+:root[data-theme="light"] .vk img{filter:invert(1)}
 h1{font-family:var(--f-big);font-weight:800;font-size:clamp(30px,5.4vw,52px);line-height:1;letter-spacing:-.02em;margin:12px 0 0}
 .lede{color:var(--soft);margin:10px 0 0;max-width:56ch}
 .pulse{display:flex;gap:10px;flex-wrap:wrap}
@@ -60,7 +65,14 @@ h1{font-family:var(--f-big);font-weight:800;font-size:clamp(30px,5.4vw,52px);lin
 .strip-head h2{font-family:var(--f-head);font-weight:800;font-size:24px;margin:0;display:flex;align-items:center;gap:8px}
 .strip-head h2 .flame{width:24px;height:24px}
 .strip-head span{color:var(--soft);font-size:13px}
-.strip{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,232px);gap:14px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory;scrollbar-width:thin}
+.strip{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,232px);gap:14px;overflow-x:auto;padding:12px 10px 28px;margin:-12px -10px -18px;scroll-snap-type:x mandatory;scrollbar-width:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.strip::-webkit-scrollbar{display:none}
+.strip.drag{cursor:grabbing;scroll-snap-type:none}
+.strip.drag .story{pointer-events:none}
+.strip .story img{-webkit-user-drag:none}
+.hint{color:var(--faint);font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:6px;transition:opacity .4s}
+.hint.gone{opacity:0}
+.hint svg{width:14px;height:14px}
 .story{scroll-snap-align:start;position:relative;aspect-ratio:9/15;border-radius:22px;overflow:hidden;cursor:pointer;border:0;padding:0;text-align:left;background:var(--card-2);isolation:isolate;max-width:100%}
 .story .cv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
 .story::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,transparent 28%,transparent 45%,rgba(0,0,0,.88) 100%)}
@@ -181,6 +193,24 @@ input[type=range]{accent-color:var(--brand);width:100%}
 .btn.go{background:var(--brand);color:var(--brand-ink);border-color:transparent}
 .btn.sv[aria-pressed="true"]{background:var(--ember);color:#1a1200;border-color:transparent}
 
+/* concorrentes */
+.conc-head{display:flex;flex-direction:column;gap:14px}
+.conc-head h2{font-family:var(--f-head);font-weight:800;font-size:24px;margin:0}
+.conc-head p{margin:0;color:var(--soft);max-width:70ch}
+.mine{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.mine::-webkit-scrollbar{display:none}
+.mine button{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:2px;border:1px solid var(--edge);background:var(--raise);border-radius:16px;padding:10px 16px;cursor:pointer;text-align:left;min-width:150px}
+.mine button b{font-family:var(--f-head);font-weight:800;font-size:15px}
+.mine button small{color:var(--soft);font-size:12px}
+.mine button[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-glow)}
+.mine button[aria-pressed="true"] b{color:var(--brand)}
+.clones{border-radius:22px;padding:16px;background:linear-gradient(135deg,rgba(255,61,61,.12),transparent 60%),var(--raise);border:1px solid rgba(255,61,61,.35);display:flex;flex-direction:column;gap:12px}
+.clones h3{margin:0;font-family:var(--f-head);font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px}
+.clones h3 svg{width:18px;height:18px;color:var(--fire-2)}
+.clones p{margin:0;color:var(--soft);font-size:13.5px}
+.b-clone{background:var(--fire-2);color:#fff}
+.b-rival{background:var(--card-2);color:var(--fg);border:1px solid var(--edge-2)}
+
 /* salvas */
 .board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:start}
 @media (max-width:1050px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -212,7 +242,7 @@ input[type=range]{accent-color:var(--brand);width:100%}
 <div class="wrap">
   <header class="top">
     <div>
-      <div class="brandline"><span class="logo"><svg viewBox="0 0 24 24"><path d="M3 7l4 10 5-7 5 7 4-10"/></svg></span>VK Company · Minerador</div>
+      <div class="brandline"><span class="vk" id="vk"></span><span class="vk"><span class="sep"></span>Minerador</span></div>
       <h1>Radar de ofertas</h1>
       <p class="lede" id="lede"></p>
     </div>
@@ -221,12 +251,13 @@ input[type=range]{accent-color:var(--brand);width:100%}
 
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" id="tab-min" aria-selected="true">Mineração</button>
+    <button class="tab" role="tab" id="tab-con" aria-selected="false">Concorrentes <span class="n" id="nCon" style="background:var(--fire-2);color:#fff" hidden>0</span></button>
     <button class="tab" role="tab" id="tab-sav" aria-selected="false">Salvas <span class="n" id="nSav">0</span></button>
   </div>
 
   <div id="view-min" style="display:flex;flex-direction:column;gap:22px">
     <section>
-      <div class="strip-head"><h2><svg class="flame"><use href="#flame"/></svg>Em chamas</h2><span>As mais escaladas do filtro atual</span></div>
+      <div class="strip-head"><h2><svg class="flame"><use href="#flame"/></svg>Em chamas</h2><span class="hint" id="hint">Arraste para ver mais<svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div>
       <div class="strip" id="strip"></div>
     </section>
 
@@ -258,6 +289,18 @@ input[type=range]{accent-color:var(--brand);width:100%}
     <div class="feed" id="feed"></div>
   </div>
 
+  <div id="view-con" hidden style="flex-direction:column;gap:20px">
+    <div class="conc-head">
+      <div><h2>Concorrentes das nossas ofertas</h2>
+      <p>Quem está anunciando o mesmo que a gente, de qualquer categoria e com ou sem análise. Quem copiar texto dos nossos anúncios aparece em vermelho como clonador.</p></div>
+      <div class="mine" id="mine"></div>
+    </div>
+    <div class="clones" id="clones"></div>
+    <div class="status"><span><b id="conShown" class="num">0</b> concorrentes</span>
+      <label>Ordenar: <select id="cOrd"><option value="ativos">Mais anúncios ativos</option><option value="novas">Mais novos</option><option value="dias">Mais tempo rodando</option></select></label></div>
+    <div class="feed" id="conFeed"></div>
+  </div>
+
   <div id="view-sav" hidden>
     <div class="board" id="board"></div>
   </div>
@@ -273,6 +316,8 @@ const HOJE = new Date(D.atualizado);
 const STATUS = [['analisar','Pra analisar','var(--cool)'],['modelando','Modelando','var(--ember)'],['rodando','Rodando','var(--brand)'],['descartada','Descartada','var(--faint)']];
 const DIGITAL_RE = /\b(pdf|apostila|e-?book|guia|gu[ií]a|receit|recet|curso|moldes?|cuadernillo|material|manual|videoaula|imprim|planilha|projetos|exerc[ií]cios|ejercicios|recetario)\b/i;
 const FLAG = {BR:'🇧🇷', MX:'🇲🇽'};
+const NOSSA = Object.fromEntries((D.nossas || []).map(n => [n.id, n.nome]));
+const C = { oferta:'', ord:'ativos' };
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fmt = s => s ? s.split('-').reverse().join('/') : '';
@@ -337,6 +382,8 @@ function badges(o){
   if (o.a?.modelar === 'alta') b.push('<span class="b b-good">Boa pra modelar</span>');
   if (o.primeira_vez === D.atualizado) b.push('<span class="b b-cool">Nova hoje</span>');
   if (o.cresc > 0) b.push(`<span class="b b-good">▲ ${o.cresc} na semana</span>`);
+  for (const c of o.clonador_de || []) b.push(`<span class="b b-clone">Clonou ${esc(NOSSA[c] || c)}</span>`);
+  for (const c of (o.concorrencia || []).filter(c => !(o.clonador_de || []).includes(c))) b.push(`<span class="b b-rival">Concorre com ${esc(NOSSA[c] || c)}</span>`);
   return b.join('');
 }
 
@@ -391,7 +438,26 @@ function render(){
   $('nSav').textContent = Object.keys(salvas).length;
 }
 
+function concorrentes(){
+  const todos = ofertas.filter(o => (o.concorrencia || []).length);
+  $('mine').innerHTML = [['', 'Todas as nossas']].concat((D.nossas||[]).map(n => [n.id, n.nome])).map(([id, nome]) => {
+    const l = todos.filter(o => !id || o.concorrencia.includes(id)), cl = l.filter(o => (o.clonador_de||[]).length).length;
+    return `<button data-mine="${id}" aria-pressed="${C.oferta===id}"><b>${esc(nome)}</b><small>${l.length} concorrente${l.length===1?'':'s'}${cl?` · ${cl} clonando`:''}</small></button>`;
+  }).join('');
+  const lista = todos.filter(o => !C.oferta || o.concorrencia.includes(C.oferta));
+  const k = {ativos:o=>o.ativos, novas:o=>-o.diasRod, dias:o=>o.diasRod}[C.ord];
+  lista.sort((x,y) => k(y)-k(x));
+  const clones = lista.filter(o => (o.clonador_de||[]).filter(c => !C.oferta || c === C.oferta).length);
+  $('clones').innerHTML = `<h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>Clonadores ${clones.length ? `(${clones.length})` : ''}</h3>` +
+    (clones.length ? `<div class="feed">${clones.map(card).join('')}</div>` :
+    `<p>Nenhum clonador encontrado ainda. Pra caçar clonador, o robô compara os anúncios dos outros com frases dos nossos anúncios. É só me mandar os textos dos nossos criativos de cada oferta que eu cadastro, e a partir da próxima mineração quem copiar aparece aqui.</p>`);
+  $('conFeed').innerHTML = lista.length ? lista.map(card).join('') : `<div class="empty"><b>Nenhum concorrente nessa oferta ainda</b>A busca de concorrentes entra na próxima mineração do robô.</div>`;
+  $('conShown').textContent = lista.length;
+  const ncl = todos.filter(o => (o.clonador_de||[]).length).length; $('nCon').hidden = !ncl; $('nCon').textContent = ncl;
+}
+
 function topo(){
+  $('vk').innerHTML = D.logo ? `<img src="${D.logo}" alt="VK"><span class="wm">VK <em>COMPANY</em></span>` : '<span class="wm">VK <em>COMPANY</em></span>';
   const dig = ofertas.filter(o => o.tipo === 'digital');
   $('lede').textContent = `Ofertas indo pro WhatsApp na Biblioteca de Anúncios, Brasil e México. Minerado em ${fmt(D.atualizado)}, ${ofertas.length} anunciantes encontrados.`;
   $('pulse').innerHTML = `
@@ -432,7 +498,7 @@ const fechar = () => { $('drawer').classList.remove('on'); $('scrim').classList.
 
 function toggleSalva(id){
   if (salvas[id]) delete salvas[id]; else salvas[id] = {status:'analisar', em:D.atualizado, nota:''};
-  guardar(); render(); if (!$('view-sav').hidden) board();
+  guardar(); render(); if (!$('view-sav').hidden) board(); if (!$('view-con').hidden) concorrentes();
 }
 
 function board(){
@@ -456,6 +522,7 @@ document.addEventListener('click', e => {
   if (t.closest('[data-close]') || t === $('scrim')) { fechar(); return; }
   const cd = t.closest('.card, .story'); if (cd) { abrir(cd.dataset.id); return; }
   const ct = t.closest('.cat'); if (ct) { const n = ct.dataset.cat; if (!n) F.cats.clear(); else F.cats.has(n) ? F.cats.delete(n) : F.cats.add(n); render(); return; }
+  const mn = t.closest('[data-mine]'); if (mn) { C.oferta = mn.dataset.mine; concorrentes(); return; }
   const sp = t.closest('#segPais button'); if (sp) { F.pais = sp.dataset.v; render(); return; }
   const sa = t.closest('#segAds button'); if (sa) { F.minAds = +sa.dataset.v; render(); return; }
 });
@@ -474,8 +541,17 @@ $('fOrd').onchange = e => { F.ord = e.target.value; render(); };
 $('minAds').oninput = e => { F.minAds = +e.target.value; render(); };
 $('minDias').oninput = e => { F.minDias = +e.target.value; render(); };
 $('moreBtn').onclick = () => { const o = $('panel').hidden; $('panel').hidden = !o; $('moreBtn').setAttribute('aria-expanded', o); };
-const aba = m => { $('tab-min').setAttribute('aria-selected', m); $('tab-sav').setAttribute('aria-selected', !m);
-  $('view-min').style.display = m ? 'flex' : 'none'; $('view-sav').hidden = m; if (!m) board(); };
-$('tab-min').onclick = () => aba(true); $('tab-sav').onclick = () => aba(false);
-topo(); render();
+const aba = v => { ['min','con','sav'].forEach(x => { $('tab-'+x).setAttribute('aria-selected', x===v); const el = $('view-'+x); el.hidden = x!==v; el.style.display = x===v ? (x==='sav'?'block':'flex') : 'none'; });
+  if (v==='sav') board(); if (v==='con') concorrentes(); };
+$('tab-min').onclick = () => aba('min'); $('tab-con').onclick = () => aba('con'); $('tab-sav').onclick = () => aba('sav');
+$('cOrd').onchange = e => { C.ord = e.target.value; concorrentes(); };
+// arrastar a faixa com o mouse
+(() => { const el = $('strip'); let down = false, x0 = 0, s0 = 0, moved = false;
+  el.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; moved = false; x0 = e.clientX; s0 = el.scrollLeft; });
+  window.addEventListener('pointermove', e => { if (!down) return; const dx = e.clientX - x0; if (Math.abs(dx) > 5) { moved = true; el.classList.add('drag'); } if (moved) el.scrollLeft = s0 - dx; });
+  window.addEventListener('pointerup', () => { if (!down) return; down = false; setTimeout(() => el.classList.remove('drag'), 0); });
+  el.addEventListener('click', e => { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
+  el.addEventListener('scroll', () => { if (el.scrollLeft > 24) $('hint').classList.add('gone'); }, { passive: true });
+})();
+topo(); render(); concorrentes();
 </script>

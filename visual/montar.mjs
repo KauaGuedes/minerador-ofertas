@@ -1,5 +1,6 @@
 // Junta ofertas.json + analise.json num pacote enxuto e gera a prévia em HTML
 import fs from 'node:fs';
+import { classificaConcorrencia, CONC } from '../concorrencia.mjs';
 const raiz = new URL('../', import.meta.url);
 const ler = (p) => JSON.parse(fs.readFileSync(new URL(p, raiz)));
 const dados = ler('data/ofertas.json');
@@ -16,8 +17,9 @@ export function pacote() {
       texto: (a.texto || '').slice(0, 450), video: !!a.video, capa: thumbs[a.id] || null,
     })),
     analise: analise[o.page_id] || null,
+    ...(o.concorrencia ? { concorrencia: o.concorrencia, clonador_de: o.clonador_de || [] } : classificaConcorrencia(o.anuncios || [])),
   }));
-  return { atualizado: (dados.atualizado || '').slice(0, 10), ofertas };
+  return { atualizado: (dados.atualizado || '').slice(0, 10), ofertas, nossas: CONC.map(({ id, nome }) => ({ id, nome })), logo: process.env.LOGO && fs.existsSync(process.env.LOGO) ? fs.readFileSync(process.env.LOGO, 'utf8').trim() : null };
 }
 
 if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split('/').pop())) {
