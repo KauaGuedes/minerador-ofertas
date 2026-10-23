@@ -1,0 +1,41 @@
+{
+ "termo": "moldes de crochê",
+ "paises": [
+  "BR"
+ ],
+ "em": "2026-10-23T23:08:38.603Z",
+ "page_ids": [
+  "382486771623525",
+  "156254264244964",
+  "1171245596071497",
+  "1390304140834155",
+  "887812421072646"
+ ],
+ "buscas": [
+  {
+   "pais": "BR",
+   "palavra": "moldes de crochê",
+   "tipo": "all",
+   "status": 403,
+   "anuncios": 29,
+   "whatsapp": 16
+  },
+  {
+   "pais": "BR",
+   "palavra": "moldes de crochê",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 16
+  },
+  {
+   "pais": "BR",
+   "palavra": "moldes de crochê",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 0,
+   "whatsapp": 0
+  }
+ ],
+ "bloqueado": false
+}
