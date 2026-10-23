@@ -1,37 +1,82 @@
 {
- "_como_usar": "buscas = palavras que o robô pesquisa na Biblioteca pra achar concorrentes dessa oferta. reconhecer = palavras que marcam um anúncio como concorrente. nossosTextos = frases copiadas dos NOSSOS anúncios (uma por linha, de preferência frases únicas, com 6 palavras ou mais); anúncio de outra página com essas frases aparece como clonador.",
+ "_como_usar": "buscas = palavras que o robô pesquisa na Biblioteca pra achar concorrentes dessa oferta. reconhecer = palavras que marcam um anúncio como concorrente. nossosTextos = frases copiadas dos NOSSOS anúncios (uma por linha, de preferência frases únicas, com 6 palavras ou mais); anúncio de outra página com essas frases aparece como clonador. parecidos = termos bem específicos da NOSSA oferta (ex.: '18 instalações'); o robô pesquisa esses termos e quem usar aparece em 'Parecidas com a nossa'.",
  "ofertas": [
   {
    "id": "eletrica",
    "nome": "Elétrica",
-   "paises": ["BR"],
-   "buscas": ["curso de eletricista", "instalações elétricas", "apostila de elétrica", "eletricista residencial", "elétrica passo a passo"],
+   "paises": [
+    "BR"
+   ],
+   "buscas": [
+    "curso de eletricista",
+    "instalações elétricas",
+    "apostila de elétrica",
+    "eletricista residencial",
+    "elétrica passo a passo"
+   ],
    "reconhecer": "eletricista|instala[çc][õo]es el[ée]tricas|el[ée]trica residencial|aprender el[ée]trica|curso de el[ée]trica|apostila de el[ée]trica",
-   "nossosTextos": []
+   "nossosTextos": [],
+   "parecidos": [
+    "18 instalações",
+    "elétrica residencial",
+    "instalações elétricas passo a passo"
+   ]
   },
   {
    "id": "comandos",
    "nome": "Comandos elétricos",
-   "paises": ["BR"],
-   "buscas": ["comandos elétricos", "apostila de comandos", "partida estrela triângulo", "contator"],
+   "paises": [
+    "BR"
+   ],
+   "buscas": [
+    "comandos elétricos",
+    "apostila de comandos",
+    "partida estrela triângulo",
+    "contator"
+   ],
    "reconhecer": "comandos? el[ée]tricos?|contator|estrela[ -]tri[âa]ngulo|partida direta|quadro de comando",
-   "nossosTextos": []
+   "nossosTextos": [],
+   "parecidos": [
+    "apostila de comandos elétricos"
+   ]
   },
   {
    "id": "parede",
    "nome": "Parede marmorizada e Acabamentos de luxo",
-   "paises": ["BR"],
-   "buscas": ["parede marmorizada", "efeito mármore", "acabamentos de luxo", "cimento queimado", "textura de parede"],
+   "paises": [
+    "BR"
+   ],
+   "buscas": [
+    "parede marmorizada",
+    "efeito mármore",
+    "acabamentos de luxo",
+    "cimento queimado",
+    "textura de parede"
+   ],
    "reconhecer": "marmoriz|efeito m[áa]rmore|acabamentos? de luxo|cimento queimado|textura de parede|parede de luxo|stucco",
-   "nossosTextos": []
+   "nossosTextos": [],
+   "parecidos": [
+    "parede marmorizada",
+    "acabamentos de luxo"
+   ]
   },
   {
    "id": "sushi",
    "nome": "Sushi",
-   "paises": ["BR"],
-   "buscas": ["receitas de sushi", "sushi em casa", "comida japonesa receitas", "temaki"],
+   "paises": [
+    "BR"
+   ],
+   "buscas": [
+    "receitas de sushi",
+    "sushi em casa",
+    "comida japonesa receitas",
+    "temaki"
+   ],
    "reconhecer": "sushi|temaki|comida japonesa|culin[áa]ria japonesa|hot roll|uramaki",
-   "nossosTextos": []
+   "nossosTextos": [],
+   "parecidos": [
+    "receitas de sushi"
+   ]
   }
  ]
 }

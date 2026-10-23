@@ -102,7 +102,7 @@ async function main() {
       for (const tipo of SO_TESTE ? ['all'] : ['all', 'video', 'image']) buscas.push({ pais, palavra, tipo });
   }
   for (const o of SO_TESTE ? [] : CONC) for (const pais of o.paises || ['BR'])
-    for (const palavra of o.buscas || []) buscas.push({ pais, palavra, tipo: 'all', conc: o.id });
+    for (const palavra of [...(o.buscas || []), ...(o.parecidos || [])]) buscas.push({ pais, palavra, tipo: 'all', conc: o.id });
   {
     for (const { pais, palavra, tipo, conc } of buscas) {
       const url = `https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=${pais}` +

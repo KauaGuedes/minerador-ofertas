@@ -8,13 +8,14 @@ export function classificaConcorrencia(anuncios, porBusca = []) {
   const texto = anuncios.map((a) => `${a.titulo} ${a.texto}`).join(' ');
   const plano = normaliza(texto);
   const concorrencia = new Set(porBusca);
-  const clonador = new Set();
+  const clonador = new Set(), parecida = new Set();
   for (const o of CONC) {
     if (o.reconhecer && new RegExp(o.reconhecer, 'i').test(texto)) concorrencia.add(o.id);
+    for (const t of o.parecidos || []) if (plano.includes(normaliza(t))) { parecida.add(o.id); concorrencia.add(o.id); }
     for (const t of o.nossosTextos || []) {
       const n = normaliza(t);
       if (n.split(' ').length >= 6 && plano.includes(n)) { clonador.add(o.id); concorrencia.add(o.id); }
     }
   }
-  return { concorrencia: [...concorrencia], clonador_de: [...clonador] };
+  return { concorrencia: [...concorrencia], clonador_de: [...clonador], parecida_com: [...parecida].filter((x) => !clonador.has(x)) };
 }

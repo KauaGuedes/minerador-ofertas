@@ -1,6 +1,7 @@
 // Baixa a capa (imagem ou capa do vídeo) dos principais anúncios de cada oferta e guarda no repositório.
 // Os links de imagem da Meta expiram em poucos dias; guardando aqui, o app sempre tem a capa.
 import fs from 'node:fs';
+import sharp from 'sharp';
 
 const DADOS = JSON.parse(fs.readFileSync(new URL('./data/ofertas.json', import.meta.url)));
 const PASTA = new URL('./data/capas/', import.meta.url);
@@ -20,7 +21,7 @@ for (const o of Object.values(DADOS.ofertas)) {
     try {
       const r = await fetch(a.capa, { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130 Safari/537.36' } });
       if (!r.ok) throw new Error(r.status);
-      fs.writeFileSync(arq, Buffer.from(await r.arrayBuffer()));
+      fs.writeFileSync(arq, await sharp(Buffer.from(await r.arrayBuffer())).resize({ width: 360, withoutEnlargement: true }).jpeg({ quality: 72, mozjpeg: true }).toBuffer());
       indice[a.id] = o.page_id; baixadas++;
     } catch { falhas++; }
     await new Promise((res) => setTimeout(res, 150));

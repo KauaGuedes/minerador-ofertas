@@ -44,6 +44,8 @@ jobs:
           fi
       - name: Baixar capas dos anúncios
         run: node capas.mjs
+      - name: Montar pacote do app
+        run: node visual/montar.mjs --painel
       - name: Salvar resultado
         run: |
           git config user.name "minerador-bot"
