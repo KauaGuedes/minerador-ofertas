@@ -13,8 +13,11 @@ const indiceArq = new URL('./data/capas/index.json', import.meta.url);
 const indice = fs.existsSync(indiceArq) ? JSON.parse(fs.readFileSync(indiceArq)) : {};
 let baixadas = 0, falhas = 0;
 
+// resultado de busca sob demanda: baixa a capa de todas as páginas achadas, mesmo com poucos anúncios
+const arqBusca = new URL('./data/ultima-busca.json', import.meta.url);
+const daBusca = new Set(process.env.BUSCA_ID && fs.existsSync(arqBusca) ? JSON.parse(fs.readFileSync(arqBusca)).page_ids || [] : []);
 for (const o of Object.values(DADOS.ofertas)) {
-  if ((o.ativos ?? 0) < MIN_ATIVOS) continue;
+  if ((o.ativos ?? 0) < MIN_ATIVOS && !daBusca.has(o.page_id)) continue;
   for (const a of (o.anuncios || []).filter((x) => x.capa).slice(0, POR_OFERTA)) {
     const arq = new URL(`${a.id}.jpg`, PASTA);
     if (fs.existsSync(arq)) { indice[a.id] = o.page_id; continue; }

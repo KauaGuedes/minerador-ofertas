@@ -55,3 +55,10 @@ for (const [i, [id, c]] of novas.entries()) {
 if (!novas.length) console.log('capas', await enviar({ acao: 'capas', itens: {}, manter }));
 for (const id of Object.keys(enviadas)) if (!fichas[id]) delete enviadas[id];
 fs.writeFileSync(arqEnviadas, JSON.stringify(enviadas));
+
+// 3) busca sob demanda: avisa o app que terminou e quais páginas foram achadas
+if (process.env.BUSCA_ID) {
+  const arq = new URL('data/ultima-busca.json', raiz);
+  const b = fs.existsSync(arq) ? JSON.parse(fs.readFileSync(arq)) : null;
+  console.log('busca', await enviar({ acao: 'busca', id: process.env.BUSCA_ID, termo: b ? b.termo : '', page_ids: b ? b.page_ids.slice(0, 200) : [], bloqueado: !!(b && b.bloqueado) }));
+}

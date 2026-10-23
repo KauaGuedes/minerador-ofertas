@@ -9,6 +9,9 @@ const CONFIG = JSON.parse(fs.readFileSync(new URL('./config.json', import.meta.u
 const ARQ_DADOS = new URL('./data/ofertas.json', import.meta.url);
 const ARQ_LOG = new URL('./data/ultima-execucao.json', import.meta.url);
 const SO_TESTE = process.argv.includes('--teste'); // rodada curta para testar
+// busca sob demanda (botão "Minerar agora" no app): só o termo pedido, nos países pedidos
+const BUSCA = (process.env.BUSCA || '').trim().slice(0, 80);
+const BUSCA_PAISES = (process.env.BUSCA_PAISES || 'BR').split(',').map((x) => x.trim().toUpperCase()).filter((x) => ['BR', 'MX'].includes(x));
 
 const espera = (ms) => new Promise((r) => setTimeout(r, ms));
 const aleatorio = (a, b) => a + Math.floor(Math.random() * (b - a));
@@ -97,11 +100,12 @@ async function main() {
 
   // 1) Buscas por palavra-chave: as gerais (todos, vídeo e imagem) e as de concorrentes das nossas ofertas
   const buscas = [];
-  for (const [pais, palavras] of Object.entries(CONFIG.paises)) {
+  if (BUSCA) for (const pais of BUSCA_PAISES.length ? BUSCA_PAISES : ['BR']) for (const tipo of ['all', 'video', 'image']) buscas.push({ pais, palavra: BUSCA, tipo });
+  else for (const [pais, palavras] of Object.entries(CONFIG.paises)) {
     for (const palavra of SO_TESTE ? palavras.slice(0, 2) : palavras)
       for (const tipo of SO_TESTE ? ['all'] : ['all', 'video', 'image']) buscas.push({ pais, palavra, tipo });
   }
-  for (const o of SO_TESTE ? [] : CONC) for (const pais of o.paises || ['BR'])
+  for (const o of SO_TESTE || BUSCA ? [] : CONC) for (const pais of o.paises || ['BR'])
     for (const palavra of [...(o.buscas || []), ...(o.parecidos || [])]) buscas.push({ pais, palavra, tipo: 'all', conc: o.id });
   {
     for (const { pais, palavra, tipo, conc } of buscas) {
@@ -148,7 +152,7 @@ async function main() {
   // 2) Total de anúncios ativos de cada anunciante (página dele na Biblioteca)
   const ordem = [...anunciantes.values()]
     .sort((x, y) => (y.porBusca.size ? 1 : 0) - (x.porBusca.size ? 1 : 0) || Math.max(...[...y.anuncios.values()].map((v) => v.duplicado)) - Math.max(...[...x.anuncios.values()].map((v) => v.duplicado)))
-    .slice(0, SO_TESTE ? 10 : CONFIG.maxAnunciantesParaContar);
+    .slice(0, SO_TESTE ? 10 : BUSCA ? 60 : CONFIG.maxAnunciantesParaContar);
   for (const a of ordem) {
     try {
       const url = `https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=ALL&view_all_page_id=${a.page_id}&search_type=page&media_type=all`;
@@ -196,7 +200,11 @@ async function main() {
   fs.writeFileSync(ARQ_DADOS, JSON.stringify(antigo, null, 1));
   log.anunciantes = anunciantes.size;
   log.contados = ordem.filter((a) => a.ativos != null).length;
-  fs.writeFileSync(ARQ_LOG, JSON.stringify(log, null, 1));
+  if (BUSCA) {
+    // resultado da busca: as páginas achadas, das mais escaladas pras menos (o app mostra só elas)
+    const ids = [...anunciantes.values()].sort((x, y) => (y.ativos ?? -1) - (x.ativos ?? -1)).map((a) => a.page_id);
+    fs.writeFileSync(new URL('./data/ultima-busca.json', import.meta.url), JSON.stringify({ termo: BUSCA, paises: BUSCA_PAISES, em: new Date().toISOString(), page_ids: ids, buscas: log.buscas, bloqueado: log.bloqueado }, null, 1));
+  } else fs.writeFileSync(ARQ_LOG, JSON.stringify(log, null, 1));
   console.log(JSON.stringify({ ...log, buscas: log.buscas.length }, null, 1));
   console.table(log.buscas);
 }

@@ -199,6 +199,33 @@ input[type=range]{accent-color:var(--brand);width:100%}
 .btn.go{background:var(--brand);color:var(--brand-ink);border-color:transparent}
 .btn.sv[aria-pressed="true"]{background:var(--ember);color:#1a1200;border-color:transparent}
 
+/* busca sob demanda */
+.bq{position:relative;border-radius:24px;padding:16px;background:
+  radial-gradient(90% 140% at 0% 0%,var(--brand-glow),transparent 55%),var(--raise);border:1px solid var(--edge-2);display:flex;flex-direction:column;gap:12px}
+.bq h2{margin:0;font-family:var(--f-head);font-weight:800;font-size:20px;display:flex;align-items:center;gap:8px}
+.bq h2 svg{width:20px;height:20px;color:var(--brand)}
+.bq form{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.bq .campo{flex:1 1 260px;display:flex;align-items:center;gap:8px;background:var(--card-2);border:1px solid var(--edge);border-radius:999px;padding:0 16px;min-width:0}
+.bq .campo:focus-within{border-color:var(--brand)}
+.bq .campo input{border:0;background:transparent;padding:12px 0;width:100%;outline:none;font-size:15px}
+.bq .go{padding:12px 20px}
+.bq .go[disabled]{opacity:.6;cursor:wait}
+.bq-msg{margin:0;font-size:13.5px;color:var(--soft)}
+.bq-msg.erro{color:var(--fire-2)} .bq-msg.ok{color:var(--brand)}
+.bq-list{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.bq-list::-webkit-scrollbar{display:none}
+.bqi{flex:none;display:flex;align-items:center;gap:8px;border:1px solid var(--edge);background:var(--card-2);border-radius:14px;padding:8px 12px;cursor:pointer;text-align:left;max-width:280px}
+.bqi b{font-weight:700;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bqi small{color:var(--soft);font-size:12px;white-space:nowrap}
+.bqi[data-st="rodando"]{cursor:default}
+.bqi[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-glow)}
+.giro{width:14px;height:14px;border-radius:50%;border:2px solid var(--edge-2);border-top-color:var(--brand);flex:none;animation:gira 1s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.giro{animation:none}}
+.bq-ban{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-radius:18px;padding:12px 16px;background:var(--brand-glow);border:1px solid var(--brand)}
+.bq-ban b{font-family:var(--f-head);font-size:17px;font-weight:800}
+.bq-ban span{color:var(--soft);font-size:13px}
+
 /* concorrentes */
 .conc-head{display:flex;flex-direction:column;gap:14px}
 .conc-head h2{font-family:var(--f-head);font-weight:800;font-size:24px;margin:0}
@@ -254,6 +281,17 @@ input[type=range]{accent-color:var(--brand);width:100%}
   </div>
 
   <div id="view-min" style="display:flex;flex-direction:column;gap:22px">
+    <section class="bq" id="bq" hidden>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Minerar uma oferta específica</h2>
+      <form id="bqForm" autocomplete="off">
+        <label class="campo"><input id="bqTermo" maxlength="60" placeholder="Ex.: receitas para diabéticos, curso de unha, moldes de crochê" aria-label="O que buscar"></label>
+        <div class="seg" id="bqPais"><button type="button" data-v="BR" aria-pressed="true">🇧🇷 Brasil</button><button type="button" data-v="MX" aria-pressed="false">🇲🇽 México</button><button type="button" data-v="BR,MX" aria-pressed="false">Os dois</button></div>
+        <button class="btn go" type="submit" id="bqGo">Minerar agora</button>
+      </form>
+      <p class="bq-msg" id="bqMsg">O robô busca só isso na Biblioteca e o resultado aparece aqui em uns 5 a 7 minutos, já com as mais escaladas primeiro.</p>
+      <div class="bq-list" id="bqList"></div>
+    </section>
+    <div class="bq-ban" id="bqBan" hidden></div>
     <section>
       <div class="strip-head"><h2><svg class="flame" viewBox="0 0 24 24" aria-hidden="true"><path fill="#ff6a1a" d="M12.6 1.8c.4 3.1-1 4.9-2.6 6.6C8.3 10.2 6.5 12 6.5 15a5.5 5.5 0 0 0 11 .4c.1-2.1-.8-3.6-1.7-4.8-.2 1.3-.8 2.3-1.8 2.8.3-3.7-.6-8.4-1.4-11.6Z"/><path fill="#ffc23d" d="M12.2 13.2c-1.4 1.3-2.2 2.3-2.2 3.6a2.3 2.3 0 0 0 4.6.1c0-1.3-.9-2.3-2.4-3.7Z"/></svg>Em chamas</h2><span class="hint" id="hint">Arraste para ver mais<svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div>
       <div class="strip" id="strip"></div>
@@ -343,7 +381,7 @@ const STORE = window.__MNR_STORE || {
 let salvas = STORE.load() || {};
 const guardar = (id) => STORE.put(id, id ? (salvas[id] || null) : null, salvas);
 
-const ofertas = D.ofertas.map(o => {
+const prep = (Dx) => Dx.ofertas.map(o => {
   const a = o.analise, txt = o.anuncios.map(x => x.titulo + ' ' + x.texto).join(' ');
   const ativos = o.ativos ?? 0, diasRod = dias(o.anuncio_mais_antigo);
   const fogo = ativos >= 100 ? 3 : ativos >= 50 ? 2 : ativos >= 30 ? 1 : 0;
@@ -355,8 +393,9 @@ const ofertas = D.ofertas.map(o => {
     nome: a?.produto || o.pagina,
     busca: (o.pagina + ' ' + txt + ' ' + (a ? Object.values(a).join(' ') : '')).toLowerCase() };
 });
+let ofertas = prep(D);
 
-const F = { pais:'', minAds:20, minDias:0, q:'', tipo:'digital', mod:'', cats:new Set(), ord:'ativos' };
+const F = { pais:'', minAds:20, minDias:0, q:'', tipo:'digital', mod:'', cats:new Set(), ord:'ativos', ids:null, termo:'' };
 
 function capa(ad, cls='thumb', extra=''){
   const img = ad?.capa ? `<img class="cv" src="${ad.capa}" alt="" loading="lazy">` :
@@ -374,7 +413,7 @@ function spark(h){
 
 function filtrar(semCat){
   const q = F.q.trim().toLowerCase();
-  return ofertas.filter(o => (!F.pais || o.paises.includes(F.pais)) && o.ativos >= F.minAds && o.diasRod >= F.minDias &&
+  return ofertas.filter(o => (!F.ids || F.ids.has(o.page_id)) && (!F.pais || o.paises.includes(F.pais)) && o.ativos >= F.minAds && o.diasRod >= F.minDias &&
     (!F.tipo || o.tipo === F.tipo) && (!F.mod || (F.mod === 'alta' ? o.a?.modelar === 'alta' : !!o.a)) &&
     (!q || o.busca.includes(q)) && (semCat || !F.cats.size || F.cats.has(o.categoria)));
 }
@@ -429,6 +468,8 @@ function story(o, i){
 
 function render(){
   const semCat = filtrar(true), lista = filtrar(false);
+  $('bqBan').hidden = !F.ids;
+  if (F.ids) $('bqBan').innerHTML = `<div><b>Resultado: “${esc(F.termo)}”</b><br><span>${F.ids.size} página${F.ids.size===1?'':'s'} achada${F.ids.size===1?'':'s'} indo pro WhatsApp · ${lista.length} com os filtros de agora</span></div><button class="btn" data-bqsair>Voltar pra mineração do dia</button>`;
   const k = {ativos:o=>o.ativos, calor:o=>o.calor, cresc:o=>o.cresc, dias:o=>o.diasRod, novas:o=>-o.diasRod}[F.ord];
   lista.sort((x,y) => k(y)-k(x) || y.ativos-x.ativos);
   const top = [...lista].sort((x,y)=>y.calor-x.calor).slice(0,10);
@@ -570,6 +611,48 @@ $('cOrd').onchange = e => { C.ord = e.target.value; concorrentes(); };
   new ResizeObserver(fim).observe(el);
 })();
 // capas que chegam depois (o app mostra as ofertas na hora e completa as capas quando terminam de baixar)
+// ---------- busca sob demanda (só no app; a prévia não tem robô)
+let BUSCAS = [], bqPais = 'BR';
+const minutos = iso => Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 6e4));
+function renderBq(){
+  $('bqList').innerHTML = BUSCAS.map(b => {
+    const st = b.status;
+    const sub = st === 'rodando' ? (minutos(b.em) > 20 ? 'não terminou, tente de novo' : `buscando · ${minutos(b.em)} min`)
+      : st === 'pronta' ? `${b.n || 0} ofertas · ver` : st === 'bloqueada' ? 'a Meta bloqueou, tente mais tarde' : 'deu erro';
+    return `<button class="bqi" data-bq="${esc(b.id)}" data-st="${esc(st)}" aria-pressed="${F.ids && F.bqId === b.id}">${st === 'rodando' && minutos(b.em) <= 20 ? '<span class="giro"></span>' : ''}<span style="min-width:0"><b>${esc(b.termo)}</b><br><small>${(b.paises||[]).map(p=>FLAG[p]||p).join(' ')} ${sub}</small></span></button>`;
+  }).join('');
+}
+function aplicaCapas(cap){ ofertas.forEach(o => o.anuncios.forEach(ad => { if (cap && cap[ad.id]) ad.capa = cap[ad.id]; })); }
+async function abrirBusca(id){
+  const b = BUSCAS.find(x => x.id === id); if (!b || b.status !== 'pronta') return;
+  $('bqMsg').className = 'bq-msg'; $('bqMsg').textContent = 'Abrindo o resultado…';
+  try { const r = STORE.recarregar ? await STORE.recarregar() : null; if (r && r.D) { ofertas = prep(r.D); if (r.capas) aplicaCapas(r.capas); } } catch {}
+  Object.assign(F, { ids: new Set(b.page_ids || []), termo: b.termo, bqId: b.id, minAds: 0, minDias: 0, tipo: '', mod: '', pais: '' }); F.cats.clear();
+  $('fTipo').value = ''; $('fMod').value = '';
+  $('bqMsg').textContent = ''; render(); renderBq(); $('bqBan').scrollIntoView({ block: 'start', behavior: 'smooth' });
+}
+function sairBusca(){ Object.assign(F, { ids: null, termo: '', bqId: null, minAds: 20, tipo: 'digital' }); $('fTipo').value = 'digital'; render(); renderBq(); }
+if (STORE.buscar) {
+  $('bq').hidden = false;
+  $('bqPais').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; bqPais = b.dataset.v; $('bqPais').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+  $('bqForm').addEventListener('submit', async e => {
+    e.preventDefault(); const termo = $('bqTermo').value.trim(), msg = $('bqMsg');
+    if (termo.length < 3) { msg.className = 'bq-msg erro'; msg.textContent = 'Escreva o que quer buscar (3 letras ou mais).'; return; }
+    $('bqGo').disabled = true; msg.className = 'bq-msg'; msg.textContent = 'Mandando o robô buscar…';
+    try { const r = await STORE.buscar(termo, bqPais.split(','));
+      if (r && r.ok) { msg.className = 'bq-msg ok'; msg.textContent = `Robô buscando “${termo}”. Em uns 5 a 7 minutos aparece aqui embaixo; pode sair da tela que ele continua.`; $('bqTermo').value = ''; }
+      else { msg.className = 'bq-msg erro'; msg.textContent = (r && r.motivo) || 'Não deu pra mandar a busca agora.'; }
+    } catch { msg.className = 'bq-msg erro'; msg.textContent = 'Sem conexão. Tente de novo.'; }
+    $('bqGo').disabled = false;
+  });
+  if (STORE.watchBuscas) STORE.watchBuscas(lista => { BUSCAS = lista || []; renderBq(); });
+  setInterval(() => { if (BUSCAS.some(b => b.status === 'rodando')) renderBq(); }, 60e3);
+}
+ROOT.addEventListener('click', e => {
+  const bi = e.target.closest('[data-bq]'); if (bi) { abrirBusca(bi.dataset.bq); return; }
+  if (e.target.closest('[data-bqsair]')) sairBusca();
+});
+
 window.__MNR_CAPAS = cap => { ofertas.forEach(o => o.anuncios.forEach(ad => { if (cap && cap[ad.id]) ad.capa = cap[ad.id]; })); render(); if (!$('view-con').hidden) concorrentes(); if (!$('view-sav').hidden) board(); };
 STORE.watch(novas => { salvas = novas || {}; render(); if (!$('view-sav').hidden) board(); if (!$('view-con').hidden) concorrentes(); });
 topo(); render(); concorrentes();
