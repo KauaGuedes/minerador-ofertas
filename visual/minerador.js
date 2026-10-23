@@ -265,6 +265,8 @@ $('cOrd').onchange = e => { C.ord = e.target.value; concorrentes(); };
   el.addEventListener('scroll', () => { if (el.scrollLeft > 24) $('hint').classList.add('gone'); fim(); }, { passive: true });
   new ResizeObserver(fim).observe(el);
 })();
+// capas que chegam depois (o app mostra as ofertas na hora e completa as capas quando terminam de baixar)
+window.__MNR_CAPAS = cap => { ofertas.forEach(o => o.anuncios.forEach(ad => { if (cap && cap[ad.id]) ad.capa = cap[ad.id]; })); render(); if (!$('view-con').hidden) concorrentes(); if (!$('view-sav').hidden) board(); };
 STORE.watch(novas => { salvas = novas || {}; render(); if (!$('view-sav').hidden) board(); if (!$('view-con').hidden) concorrentes(); });
 topo(); render(); concorrentes();
 
@@ -288,6 +290,7 @@ window.MineradorMount = function(slot, opts){
     carregando = dados(opts).then(D => {
       box.innerHTML = HTML; iniciado = true;
       iniciar(sr, D, opts.store);
+      if (opts.capas) opts.capas().then(m => { if (m && window.__MNR_CAPAS) window.__MNR_CAPAS(m); }).catch(() => {});
     }).catch(e => { box.innerHTML = '<div class="loading">' + String(e.message || e) + '</div>'; setTimeout(() => { carregando = null; }, 60000); });
   }
 };

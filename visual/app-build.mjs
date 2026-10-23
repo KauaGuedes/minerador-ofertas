@@ -52,6 +52,7 @@ window.MineradorMount = function(slot, opts){
     carregando = dados(opts).then(D => {
       box.innerHTML = HTML; iniciado = true;
       iniciar(sr, D, opts.store);
+      if (opts.capas) opts.capas().then(m => { if (m && window.__MNR_CAPAS) window.__MNR_CAPAS(m); }).catch(() => {});
     }).catch(e => { box.innerHTML = '<div class="loading">' + String(e.message || e) + '</div>'; setTimeout(() => { carregando = null; }, 60000); });
   }
 };
