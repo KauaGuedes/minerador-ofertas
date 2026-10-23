@@ -21,7 +21,7 @@ let css = css0
 .mnr .top>div:first-child{display:none}
 .mnr .top{justify-content:flex-end}
 .mnr .tools{position:static;margin-inline:0;border:1px solid var(--edge);border-radius:20px;background:var(--raise);backdrop-filter:none}
-.mnr .scrim{z-index:2000}.mnr .drawer{z-index:2001}
+
 .mnr .loading{padding:60px 16px;text-align:center;color:var(--soft)}
 `;
 

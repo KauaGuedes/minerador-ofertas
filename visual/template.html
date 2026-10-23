@@ -65,15 +65,17 @@ h1{font-family:var(--f-big);font-weight:800;font-size:clamp(30px,5.4vw,52px);lin
 .strip-head h2{font-family:var(--f-head);font-weight:800;font-size:24px;margin:0;display:flex;align-items:center;gap:8px}
 .strip-head h2 .flame{width:24px;height:24px}
 .strip-head span{color:var(--soft);font-size:13px}
-.strip{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,232px);gap:14px;overflow-x:auto;padding:12px 10px 28px;margin:-12px -10px -18px;scroll-snap-type:x mandatory;scrollbar-width:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.strip{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,232px);gap:14px;overflow-x:auto;padding:14px 14px 30px;margin:-14px 0 -20px;scrollbar-width:none;cursor:grab;user-select:none;-webkit-user-select:none;
+  -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 56px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 56px),transparent)}
+.strip.fim{-webkit-mask-image:none;mask-image:none}
 .strip::-webkit-scrollbar{display:none}
-.strip.drag{cursor:grabbing;scroll-snap-type:none}
+.strip.drag{cursor:grabbing}
 .strip.drag .story{pointer-events:none}
 .strip .story img{-webkit-user-drag:none}
 .hint{color:var(--faint);font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:6px;transition:opacity .4s}
 .hint.gone{opacity:0}
 .hint svg{width:14px;height:14px}
-.story{scroll-snap-align:start;position:relative;aspect-ratio:9/15;border-radius:22px;overflow:hidden;cursor:pointer;border:0;padding:0;text-align:left;background:var(--card-2);isolation:isolate;max-width:100%}
+.story{position:relative;aspect-ratio:9/15;border-radius:22px;overflow:hidden;cursor:pointer;border:0;padding:0;text-align:left;background:var(--card-2);isolation:isolate;max-width:100%}
 .story .cv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
 .story::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,transparent 28%,transparent 45%,rgba(0,0,0,.88) 100%)}
 .story .rank{position:absolute;top:10px;left:12px;font-family:var(--f-big);font-weight:800;font-size:34px;color:#fff;line-height:1;text-shadow:0 2px 12px rgba(0,0,0,.5)}
@@ -167,12 +169,15 @@ input[type=range]{accent-color:var(--brand);width:100%}
 .empty b{display:block;color:var(--fg);font-family:var(--f-head);font-size:22px;font-weight:800;margin-bottom:6px}
 
 /* painel lateral */
-.scrim{position:fixed;inset:0;background:var(--shade);z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
-.scrim.on{opacity:1;pointer-events:auto}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);z-index:41;background:var(--raise);border-left:1px solid var(--edge);transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);overflow-y:auto;
+.drawer{position:fixed;inset:0 0 0 auto;margin:0;width:min(560px,100%);max-width:100%;height:100%;max-height:100%;border:0;color:var(--fg);background:var(--raise);border-left:1px solid var(--edge);overflow-y:auto;
   padding:calc(18px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(30px + env(safe-area-inset-bottom,0px)) 20px;display:flex;flex-direction:column;gap:18px}
-.drawer.on{transform:none}
-@media (prefers-reduced-motion:reduce){.drawer,.scrim{transition:none}}
+.drawer[open]{animation:entra .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes entra{from{transform:translateX(100%)}to{transform:none}}
+.drawer::backdrop{background:rgba(0,0,0,.55)}
+.drawer>*{flex-shrink:0}
+.drawer:not([open]){display:none}
+.play{cursor:pointer}
+@media (prefers-reduced-motion:reduce){.drawer[open]{animation:none}}
 .dhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
 .x{border:1px solid var(--edge);background:var(--card-2);width:38px;height:38px;border-radius:50%;cursor:pointer;display:grid;place-items:center;flex:none}
 .dt{font-family:var(--f-head);font-size:26px;font-weight:800;line-height:1.15;margin:8px 0 2px}
@@ -299,8 +304,7 @@ input[type=range]{accent-color:var(--brand);width:100%}
   </div>
 </div>
 
-<div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Detalhes da oferta"></aside>
+<dialog class="drawer" id="drawer" aria-label="Detalhes da oferta"></dialog>
 
 <script id="dados" type="application/json">__DATA__</script>
 <script>
@@ -429,6 +433,7 @@ function render(){
   lista.sort((x,y) => k(y)-k(x) || y.ativos-x.ativos);
   const top = [...lista].sort((x,y)=>y.calor-x.calor).slice(0,10);
   $('strip').innerHTML = top.length ? top.map(story).join('') : '<p class="note">Nenhuma oferta quente com esses filtros.</p>';
+  requestAnimationFrame(() => $('strip').dispatchEvent(new Event('scroll')));
   const c = {}; semCat.forEach(o => c[o.categoria] = (c[o.categoria]||0)+1);
   $('cats').innerHTML = `<button class="cat" data-cat="" aria-pressed="${!F.cats.size}">Todas as categorias</button>` +
     Object.entries(c).sort((a,b)=>b[1]-a[1]).map(([n,q]) => `<button class="cat" data-cat="${esc(n)}" aria-pressed="${F.cats.has(n)}">${esc(n)}<i>${q}</i></button>`).join('');
@@ -469,7 +474,7 @@ function topo(){
     <div class="pchip new"><span class="ic">${ICON.clock}</span><div><b class="num">${dig.filter(o=>o.diasRod<=30 && o.ativos>=20).length}</b><br><small>novas e já escaladas</small></div></div>`;
 }
 
-function abrir(id){
+function abrir(id, tocar){
   const o = ofertas.find(x => x.page_id === id); if (!o) return;
   const a = o.a, s = salvas[id];
   const sec = (t, v, hl) => v ? `<div class="sec${hl?' hl':''}"><h3>${t}</h3><p>${esc(v)}</p></div>` : '';
@@ -496,10 +501,13 @@ function abrir(id){
       <a class="btn go" href="${o.biblioteca}" target="_blank" rel="noopener">${ICON.ext}Abrir todos na Biblioteca</a>
       <button class="btn sv" data-star-drawer="${id}" aria-pressed="${!!s}">${s?'Salva':'Salvar oferta'}</button>
     </div>`;
-  $('drawer').classList.add('on'); $('scrim').classList.add('on'); $('drawer').setAttribute('aria-hidden','false');
-  $('drawer').scrollTop = 0; $('drawer').querySelector('[data-close]').focus();
+  const dl = $('drawer'); if (!dl.open) { try { dl.showModal(); } catch { dl.setAttribute('open', ''); } }
+  dl.scrollTop = 0;
+  const v = dl.querySelector('video');
+  if (tocar && v) { v.play().catch(() => {}); v.scrollIntoView({ block: 'nearest', inline: 'start' }); }
+  else dl.querySelector('[data-close]').focus();
 }
-const fechar = () => { $('drawer').classList.remove('on'); $('scrim').classList.remove('on'); $('drawer').setAttribute('aria-hidden','true'); };
+const fechar = () => { const dl = $('drawer'); dl.querySelectorAll('video').forEach(v => v.pause()); if (dl.open) { try { dl.close(); } catch { dl.removeAttribute('open'); } } };
 
 function toggleSalva(id){
   if (salvas[id]) delete salvas[id]; else salvas[id] = {status:'analisar', em:new Date().toISOString().slice(0,10), nota:''};
@@ -524,8 +532,9 @@ ROOT.addEventListener('click', e => {
   if (t.closest('[data-star]')) { e.stopPropagation(); toggleSalva(t.closest('.card').dataset.id); return; }
   const sd = t.closest('[data-star-drawer]'); if (sd) { toggleSalva(sd.dataset.starDrawer); abrir(sd.dataset.starDrawer); return; }
   const op = t.closest('[data-open]'); if (op) { e.preventDefault(); abrir(op.dataset.open); return; }
-  if (t.closest('[data-close]') || t === $('scrim')) { fechar(); return; }
-  const cd = t.closest('.card, .story'); if (cd) { abrir(cd.dataset.id); return; }
+  if (t.closest('[data-close]')) { fechar(); return; }
+  if (t === $('drawer')) { const r = t.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) fechar(); return; }
+  const cd = t.closest('.card, .story'); if (cd) { abrir(cd.dataset.id, !!t.closest('.play')); return; }
   const ct = t.closest('.cat'); if (ct) { const n = ct.dataset.cat; if (!n) F.cats.clear(); else F.cats.has(n) ? F.cats.delete(n) : F.cats.add(n); render(); return; }
   const mn = t.closest('[data-mine]'); if (mn) { C.oferta = mn.dataset.mine; concorrentes(); return; }
   const sp = t.closest('#segPais button'); if (sp) { F.pais = sp.dataset.v; render(); return; }
@@ -556,7 +565,9 @@ $('cOrd').onchange = e => { C.ord = e.target.value; concorrentes(); };
   window.addEventListener('pointermove', e => { if (!down) return; const dx = e.clientX - x0; if (Math.abs(dx) > 5) { moved = true; el.classList.add('drag'); } if (moved) el.scrollLeft = s0 - dx; });
   window.addEventListener('pointerup', () => { if (!down) return; down = false; setTimeout(() => el.classList.remove('drag'), 0); });
   el.addEventListener('click', e => { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
-  el.addEventListener('scroll', () => { if (el.scrollLeft > 24) $('hint').classList.add('gone'); }, { passive: true });
+  const fim = () => el.classList.toggle('fim', el.scrollLeft + el.clientWidth >= el.scrollWidth - 4);
+  el.addEventListener('scroll', () => { if (el.scrollLeft > 24) $('hint').classList.add('gone'); fim(); }, { passive: true });
+  new ResizeObserver(fim).observe(el);
 })();
 STORE.watch(novas => { salvas = novas || {}; render(); if (!$('view-sav').hidden) board(); if (!$('view-con').hidden) concorrentes(); });
 topo(); render(); concorrentes();
