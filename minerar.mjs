@@ -97,9 +97,10 @@ async function main() {
   // 1) Buscas por palavra-chave
   for (const [pais, palavras] of Object.entries(CONFIG.paises)) {
     const lista = SO_TESTE ? palavras.slice(0, 2) : palavras;
-    for (const palavra of lista) {
+    const tipos = SO_TESTE ? ['all'] : ['all', 'video', 'image'];
+    for (const palavra of lista) for (const tipo of tipos) {
       const url = `https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=${pais}` +
-        `&q=${encodeURIComponent(palavra)}&search_type=keyword_unordered&media_type=all`;
+        `&q=${encodeURIComponent(palavra)}&search_type=keyword_unordered&media_type=${tipo}`;
       try {
         const aba = await abrir(page, url);
         const rolagens = SO_TESTE ? 2 : CONFIG.rolagensPorBusca;
@@ -115,7 +116,7 @@ async function main() {
         aba.parar();
         const ads = [...extraiAnuncios(html), ...aba.respostas.flatMap(extraiAnuncios)];
         const zap = ads.filter(ehWhatsApp);
-        log.buscas.push({ pais, palavra, status: aba.status, anuncios: ads.length, whatsapp: zap.length });
+        log.buscas.push({ pais, palavra, tipo, status: aba.status, anuncios: ads.length, whatsapp: zap.length });
         if (ads.length === 0 && /login|checkpoint/i.test(page.url())) log.bloqueado = true;
 
         for (const ad of zap) {
@@ -133,7 +134,7 @@ async function main() {
           a.paises.add(pais); a.palavras.add(palavra);
           if (!a.anuncios.has(ad.ad_archive_id)) a.anuncios.set(ad.ad_archive_id, resumoAnuncio(ad));
         }
-      } catch (e) { log.erros.push(`${pais} "${palavra}": ${e.message}`); }
+      } catch (e) { log.erros.push(`${pais} "${palavra}" ${tipo}: ${e.message}`); }
       await espera(aleatorio(2000, 5000));
     }
   }
