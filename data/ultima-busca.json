@@ -1,40 +1,37 @@
 {
- "termo": "parede marmorizada",
+ "termo": "Secreto",
  "paises": [
   "BR"
  ],
- "em": "2026-10-23T23:25:41.421Z",
+ "em": "2026-10-23T23:30:21.281Z",
  "page_ids": [
-  "1210264782181024",
-  "498628219997855",
-  "253993338060263",
-  "1707121979535919",
-  "1246736145182515"
+  "100140198802492",
+  "142444998941299"
  ],
  "buscas": [
   {
    "pais": "BR",
-   "palavra": "parede marmorizada",
+   "palavra": "Secreto",
    "tipo": "all",
    "status": 403,
-   "anuncios": 24,
-   "whatsapp": 21
+   "anuncios": 30,
+   "whatsapp": 0
   },
   {
    "pais": "BR",
-   "palavra": "parede marmorizada",
+   "palavra": "Secreto",
    "tipo": "video",
    "status": 200,
-   "anuncios": 25,
-   "whatsapp": 24
+   "anuncios": 30,
+   "whatsapp": 0
   },
   {
    "pais": "BR",
-   "palavra": "parede marmorizada",
+   "palavra": "Secreto",
    "tipo": "image",
    "status": 200,
-   "anuncios": 1,
-   "whatsapp": 0
+   "anuncios": 22,
+   "whatsapp": 2
   }
  ],
  "bloqueado": false
