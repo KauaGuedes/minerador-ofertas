@@ -1,0 +1,37 @@
+{
+ "data": "2026-10-23T17:14:42.847Z",
+ "buscas": [
+  {
+   "pais": "BR",
+   "palavra": "pague depois",
+   "status": 403,
+   "anuncios": 30,
+   "whatsapp": 12
+  },
+  {
+   "pais": "BR",
+   "palavra": "pague só depois",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 18
+  },
+  {
+   "pais": "MX",
+   "palavra": "paga después",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 7
+  },
+  {
+   "pais": "MX",
+   "palavra": "pagas después",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 13
+  }
+ ],
+ "erros": [],
+ "bloqueado": false,
+ "anunciantes": 27,
+ "contados": 10
+}
