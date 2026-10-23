@@ -1,0 +1,12 @@
+{
+  "name": "minerador-ofertas",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "minerar": "node minerar.mjs",
+    "teste": "node minerar.mjs --teste"
+  },
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}

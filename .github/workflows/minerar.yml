@@ -1,0 +1,45 @@
+name: Minerar ofertas
+
+on:
+  schedule:
+    - cron: '0 7 * * *'   # todo dia às 4h da manhã (horário de Brasília)
+  workflow_dispatch:
+    inputs:
+      teste:
+        description: 'Rodada curta de teste'
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths: ['minerar.mjs', 'config.json', '.github/workflows/minerar.yml']
+
+permissions:
+  contents: write
+
+concurrency: minerar
+
+jobs:
+  minerar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - name: Rodar minerador
+        run: |
+          if [ "${{ github.event_name }}" = "push" ] || [ "${{ inputs.teste }}" = "true" ]; then
+            node minerar.mjs --teste
+          else
+            node minerar.mjs
+          fi
+      - name: Salvar resultado
+        run: |
+          git config user.name "minerador-bot"
+          git config user.email "minerador-bot@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "Mineração $(date -u +%Y-%m-%d)"
+          git pull --rebase origin main && git push

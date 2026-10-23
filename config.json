@@ -1,0 +1,31 @@
+{
+  "paises": {
+    "BR": [
+      "pague depois",
+      "pague só depois",
+      "receba primeiro",
+      "receba agora e pague depois",
+      "apostila",
+      "material em PDF",
+      "passo a passo PDF",
+      "guia completo",
+      "e-book",
+      "material digital"
+    ],
+    "MX": [
+      "paga después",
+      "pagas después",
+      "recibe primero",
+      "guía PDF",
+      "manual en PDF",
+      "paso a paso PDF",
+      "ebook",
+      "material digital",
+      "curso PDF"
+    ]
+  },
+  "rolagensPorBusca": 6,
+  "maxAnunciantesParaContar": 120,
+  "minAnunciosNaBuscaParaContar": 1,
+  "ignorarPaginasComMaisDeCurtidas": 3000000
+}
