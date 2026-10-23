@@ -19,6 +19,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write   # identificação do GitHub pro app da VK aceitar os dados (sem chave guardada)
 
 concurrency: minerar
 
@@ -46,6 +47,8 @@ jobs:
         run: node capas.mjs
       - name: Montar pacote do app
         run: node visual/montar.mjs --painel
+      - name: Enviar pro app da VK
+        run: node enviar.mjs
       - name: Salvar resultado
         run: |
           git config user.name "minerador-bot"

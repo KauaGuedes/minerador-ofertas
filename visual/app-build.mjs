@@ -34,13 +34,9 @@ function iniciar(ROOT_, D_, STORE_){
 ${script}
 }
 let host = null, carregando = null, iniciado = false;
-const BASE = 'https://raw.githubusercontent.com/KauaGuedes/minerador-ofertas/main/data/';
-async function dados(){
-  const r = await fetch(BASE + 'painel.json?t=' + Math.floor(Date.now() / 6e5), { cache: 'no-store' });
-  if (!r.ok) throw new Error('Não consegui ler os dados do minerador (' + r.status + ').');
-  const d = await r.json();
-  d.ofertas.forEach(o => o.anuncios.forEach(a => { if (a.capa) a.capa = BASE + a.capa; }));
-  return d;
+async function dados(opts){
+  if (!opts.load) throw new Error('Minerador sem fonte de dados.');
+  return opts.load();
 }
 window.MineradorMount = function(slot, opts){
   opts = opts || {};
@@ -53,10 +49,10 @@ window.MineradorMount = function(slot, opts){
   box.setAttribute('data-theme', opts.theme === 'light' ? 'light' : 'dark');
   if (host.parentNode !== slot) slot.appendChild(host);
   if (!iniciado && !carregando) {
-    carregando = dados().then(D => {
+    carregando = dados(opts).then(D => {
       box.innerHTML = HTML; iniciado = true;
       iniciar(sr, D, opts.store);
-    }).catch(e => { box.innerHTML = '<div class="loading">' + String(e.message || e) + '</div>'; carregando = null; });
+    }).catch(e => { box.innerHTML = '<div class="loading">' + String(e.message || e) + '</div>'; setTimeout(() => { carregando = null; }, 60000); });
   }
 };
 })();
