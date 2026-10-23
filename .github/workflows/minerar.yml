@@ -9,6 +9,10 @@ on:
         description: 'Rodada curta de teste'
         type: boolean
         default: false
+      so_capas:
+        description: 'Só baixar as capas (sem minerar)'
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths: ['minerar.mjs', 'config.json', '.github/workflows/minerar.yml']
@@ -29,13 +33,17 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npx playwright install --with-deps chromium
+        if: ${{ inputs.so_capas != true }}
       - name: Rodar minerador
+        if: ${{ inputs.so_capas != true }}
         run: |
           if [ "${{ github.event_name }}" = "push" ] || [ "${{ inputs.teste }}" = "true" ]; then
             node minerar.mjs --teste
           else
             node minerar.mjs
           fi
+      - name: Baixar capas dos anúncios
+        run: node capas.mjs
       - name: Salvar resultado
         run: |
           git config user.name "minerador-bot"
