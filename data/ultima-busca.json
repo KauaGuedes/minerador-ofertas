@@ -1,39 +1,39 @@
 {
- "termo": "moldes de crochê",
+ "termo": "parede marmorizada",
  "paises": [
   "BR"
  ],
- "em": "2026-10-23T23:08:38.603Z",
+ "em": "2026-10-23T23:25:41.421Z",
  "page_ids": [
-  "382486771623525",
-  "156254264244964",
-  "1171245596071497",
-  "1390304140834155",
-  "887812421072646"
+  "1210264782181024",
+  "498628219997855",
+  "253993338060263",
+  "1707121979535919",
+  "1246736145182515"
  ],
  "buscas": [
   {
    "pais": "BR",
-   "palavra": "moldes de crochê",
+   "palavra": "parede marmorizada",
    "tipo": "all",
    "status": 403,
-   "anuncios": 29,
-   "whatsapp": 16
+   "anuncios": 24,
+   "whatsapp": 21
   },
   {
    "pais": "BR",
-   "palavra": "moldes de crochê",
+   "palavra": "parede marmorizada",
    "tipo": "video",
    "status": 200,
-   "anuncios": 29,
-   "whatsapp": 16
+   "anuncios": 25,
+   "whatsapp": 24
   },
   {
    "pais": "BR",
-   "palavra": "moldes de crochê",
+   "palavra": "parede marmorizada",
    "tipo": "image",
    "status": 200,
-   "anuncios": 0,
+   "anuncios": 1,
    "whatsapp": 0
   }
  ],
