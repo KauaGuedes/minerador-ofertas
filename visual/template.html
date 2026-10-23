@@ -417,7 +417,7 @@ function card(o){
 function story(o, i){
   return `<button class="story${o.fogo>=2?' hot':''}" data-id="${o.page_id}" aria-label="${esc(o.nome)}">
     ${o.anuncios[0]?.capa ? `<img class="cv" src="${o.anuncios[0].capa}" alt="">` : `<div class="nocv"><span>${ICON.spark}Criativo aqui</span></div>`}
-    ${o.anuncios[0]?.video ? '<span class="play">${PLAY}</span>' : ''}
+    ${o.anuncios[0]?.video ? `<span class="play">${PLAY}</span>` : ''}
     <span class="rank">${i+1}</span><span class="flag">${o.paises.map(p=>FLAG[p]).join('')}</span>
     <span class="bot"><span class="big num">${FL(22)}${o.ativos}<small>ativos</small></span>
     <span class="ttl">${esc(o.nome)}</span></span></button>`;
