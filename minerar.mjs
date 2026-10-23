@@ -86,6 +86,19 @@ async function abrir(page, url) {
   return { status: r?.status(), respostas, parar: () => page.off('response', ouvinte) };
 }
 
+// Ofertas em espionagem no app (aba Espionagem): o robô reconta todas elas todo dia, mesmo que não apareçam nas buscas.
+// Pergunta ao app pela função /api/minerador-sync com a identificação do GitHub (OIDC); fora do GitHub Actions, nenhuma.
+async function espionadas() {
+  const { ACTIONS_ID_TOKEN_REQUEST_URL: u, ACTIONS_ID_TOKEN_REQUEST_TOKEN: t } = process.env;
+  if (!u || !t) return [];
+  try {
+    const tok = (await (await fetch(u + '&audience=vk-minerador', { headers: { Authorization: 'Bearer ' + t } })).json()).value;
+    const r = await fetch('https://vkcompanyy.netlify.app/api/minerador-sync', { method: 'POST', headers: { 'content-type': 'application/json', Authorization: 'Bearer ' + tok }, body: JSON.stringify({ acao: 'espiao' }) });
+    const j = await r.json();
+    return Array.isArray(j.ids) ? j.ids.map(String) : [];
+  } catch (e) { console.error('espionadas', e.message); return []; }
+}
+
 async function main() {
   const navegador = await chromium.launch({ headless: true, args: ['--disable-blink-features=AutomationControlled'] });
   const contexto = await navegador.newContext({
@@ -150,9 +163,19 @@ async function main() {
   }
 
   // 2) Total de anúncios ativos de cada anunciante (página dele na Biblioteca)
+  // as espionadas entram sempre (as que a busca não achou hoje voltam com os dados que já tinham)
+  const espia = SO_TESTE ? [] : await espionadas();
+  const velhos = fs.existsSync(ARQ_DADOS) ? JSON.parse(fs.readFileSync(ARQ_DADOS)).ofertas || {} : {};
+  for (const id of espia) if (!anunciantes.has(id)) {
+    const v = velhos[id] || {};
+    anunciantes.set(id, { page_id: id, pagina: v.pagina || id, perfil: v.perfil, foto: v.foto, curtidas: v.curtidas, categorias: v.categorias,
+      paises: new Set(v.paises || []), palavras: new Set(v.palavras || []), anuncios: new Map((v.anuncios || []).map((a) => [a.id, a])), porBusca: new Set() });
+  }
+  log.espionadas = espia.length;
+  const ESPIA = new Set(espia);
   const ordem = [...anunciantes.values()]
-    .sort((x, y) => (y.porBusca.size ? 1 : 0) - (x.porBusca.size ? 1 : 0) || Math.max(...[...y.anuncios.values()].map((v) => v.duplicado)) - Math.max(...[...x.anuncios.values()].map((v) => v.duplicado)))
-    .slice(0, SO_TESTE ? 10 : BUSCA ? 60 : CONFIG.maxAnunciantesParaContar);
+    .sort((x, y) => (ESPIA.has(y.page_id) ? 1 : 0) - (ESPIA.has(x.page_id) ? 1 : 0) || (y.porBusca.size ? 1 : 0) - (x.porBusca.size ? 1 : 0) || Math.max(...[...y.anuncios.values()].map((v) => v.duplicado)) - Math.max(...[...x.anuncios.values()].map((v) => v.duplicado)))
+    .slice(0, (SO_TESTE ? 10 : BUSCA ? 60 : CONFIG.maxAnunciantesParaContar) + espia.length);
   for (const a of ordem) {
     try {
       const url = `https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=ALL&view_all_page_id=${a.page_id}&search_type=page&media_type=all`;

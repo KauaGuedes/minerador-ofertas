@@ -226,6 +226,43 @@ input[type=range]{accent-color:var(--brand);width:100%}
 .bq-ban b{font-family:var(--f-head);font-size:17px;font-weight:800}
 .bq-ban span{color:var(--soft);font-size:13px}
 
+/* histórico de buscas */
+.hist{display:flex;flex-direction:column;gap:10px}
+.hist-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.hist-head h2{margin:0;font-family:var(--f-head);font-weight:800;font-size:20px}
+.hist-head span{color:var(--soft);font-size:13px}
+.hist-list{display:flex;flex-direction:column;gap:8px}
+.hrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--edge);background:var(--raise);border-radius:16px;padding:12px 14px;cursor:pointer;text-align:left;width:100%}
+.hrow:hover{border-color:var(--edge-2)}
+.hrow[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-glow)}
+.hrow[data-st="rodando"]{cursor:default}
+.hrow .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--card-2);color:var(--soft)}
+.hrow b{font-family:var(--f-head);font-weight:800;font-size:16px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hrow small{color:var(--soft);font-size:12.5px}
+.hrow .res{font-family:var(--f-big);font-weight:700;font-size:18px;text-align:right;line-height:1.1}
+.hrow .res small{display:block;font-family:var(--f-body);font-weight:600}
+/* espionagem */
+.spy-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:14px}
+.spy{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;background:var(--card);border:1px solid var(--edge);border-radius:22px;padding:12px;cursor:pointer;min-width:0}
+.spy .thumb{border-radius:14px}
+.spy h3{margin:0;font-family:var(--f-head);font-weight:800;font-size:17px;line-height:1.2}
+.spy .cp{margin:0}
+.spy .since{color:var(--soft);font-size:12.5px;margin-top:2px}
+.vs{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.vs .nb b{font-size:24px}
+.vs .seta{color:var(--faint);font-size:20px}
+.dif{font-weight:800;font-size:13px;padding:4px 10px;border-radius:999px}
+.dif.up{background:var(--brand-glow);color:var(--brand)} .dif.down{background:rgba(255,61,61,.13);color:var(--fire-2)} .dif.eq{background:var(--card-2);color:var(--soft)}
+.spy .acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.spy .acts button{border:1px solid var(--edge);background:transparent;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;cursor:pointer;color:var(--soft)}
+.spy .acts button:hover{color:var(--fire-2);border-color:var(--fire-2)}
+.spy .spark{width:120px;height:34px}
+.eye{position:absolute;top:14px;right:56px;width:36px;height:36px;border-radius:50%;border:1px solid var(--edge);background:var(--raise);display:grid;place-items:center;cursor:pointer;color:var(--faint);z-index:2}
+.eye svg{width:18px;height:18px}
+.eye[aria-pressed="true"]{color:#06101f;background:var(--cool);border-color:transparent}
+.ct{padding-right:84px!important}
+.btn.ey[aria-pressed="true"]{background:var(--cool);color:#06101f;border-color:transparent}
+
 /* concorrentes */
 .conc-head{display:flex;flex-direction:column;gap:14px}
 .conc-head h2{font-family:var(--f-head);font-weight:800;font-size:24px;margin:0}
@@ -276,22 +313,13 @@ input[type=range]{accent-color:var(--brand);width:100%}
 
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" id="tab-min" aria-selected="true">Mineração</button>
+    <button class="tab" role="tab" id="tab-bus" aria-selected="false">Buscar</button>
     <button class="tab" role="tab" id="tab-con" aria-selected="false">Concorrentes <span class="n" id="nCon" style="background:var(--fire-2);color:#fff" hidden>0</span></button>
+    <button class="tab" role="tab" id="tab-esp" aria-selected="false">Espionagem <span class="n" id="nEsp" style="background:var(--cool);color:#06101f">0</span></button>
     <button class="tab" role="tab" id="tab-sav" aria-selected="false">Salvas <span class="n" id="nSav">0</span></button>
   </div>
 
   <div id="view-min" style="display:flex;flex-direction:column;gap:22px">
-    <section class="bq" id="bq" hidden>
-      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Minerar uma oferta específica</h2>
-      <form id="bqForm" autocomplete="off">
-        <label class="campo"><input id="bqTermo" maxlength="60" placeholder="Ex.: receitas para diabéticos, curso de unha, moldes de crochê" aria-label="O que buscar"></label>
-        <div class="seg" id="bqPais"><button type="button" data-v="BR" aria-pressed="true">🇧🇷 Brasil</button><button type="button" data-v="MX" aria-pressed="false">🇲🇽 México</button><button type="button" data-v="BR,MX" aria-pressed="false">Os dois</button></div>
-        <button class="btn go" type="submit" id="bqGo">Minerar agora</button>
-      </form>
-      <p class="bq-msg" id="bqMsg">O robô busca só isso na Biblioteca e o resultado aparece aqui em uns 5 a 7 minutos, já com as mais escaladas primeiro.</p>
-      <div class="bq-list" id="bqList"></div>
-    </section>
-    <div class="bq-ban" id="bqBan" hidden></div>
     <section>
       <div class="strip-head"><h2><svg class="flame" viewBox="0 0 24 24" aria-hidden="true"><path fill="#ff6a1a" d="M12.6 1.8c.4 3.1-1 4.9-2.6 6.6C8.3 10.2 6.5 12 6.5 15a5.5 5.5 0 0 0 11 .4c.1-2.1-.8-3.6-1.7-4.8-.2 1.3-.8 2.3-1.8 2.8.3-3.7-.6-8.4-1.4-11.6Z"/><path fill="#ffc23d" d="M12.2 13.2c-1.4 1.3-2.2 2.3-2.2 3.6a2.3 2.3 0 0 0 4.6.1c0-1.3-.9-2.3-2.4-3.7Z"/></svg>Em chamas</h2><span class="hint" id="hint">Arraste para ver mais<svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span></div>
       <div class="strip" id="strip"></div>
@@ -323,6 +351,33 @@ input[type=range]{accent-color:var(--brand);width:100%}
     </div>
 
     <div class="feed" id="feed"></div>
+  </div>
+
+  <div id="view-bus" hidden style="flex-direction:column;gap:18px">
+    <section class="bq" id="bq">
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Minerar uma oferta específica</h2>
+      <form id="bqForm" autocomplete="off">
+        <label class="campo"><input id="bqTermo" maxlength="60" placeholder="Ex.: receitas para diabéticos, curso de unha, moldes de crochê" aria-label="O que buscar"></label>
+        <div class="seg" id="bqPais"><button type="button" data-v="BR" aria-pressed="true">🇧🇷 Brasil</button><button type="button" data-v="MX" aria-pressed="false">🇲🇽 México</button><button type="button" data-v="BR,MX" aria-pressed="false">Os dois</button></div>
+        <button class="btn go" type="submit" id="bqGo">Minerar agora</button>
+      </form>
+      <p class="bq-msg" id="bqMsg">O robô busca só isso na Biblioteca e o resultado aparece no histórico abaixo em poucos minutos, já com as mais escaladas primeiro.</p>
+      
+    </section>
+    <section class="hist">
+      <div class="hist-head"><h2>Histórico de buscas</h2><span id="histN"></span></div>
+      <div class="hist-list" id="bqList"></div>
+    </section>
+    <section id="bqRes" hidden style="display:flex;flex-direction:column;gap:14px">
+      <div class="bq-ban" id="bqBan"></div>
+      <div class="feed" id="bqFeed"></div>
+    </section>
+  </div>
+
+  <div id="view-esp" hidden style="flex-direction:column;gap:18px">
+    <div class="conc-head"><div><h2>Espionagem</h2>
+      <p>As ofertas que vocês estão acompanhando. O robô reconta os anúncios ativos de cada uma todo dia de madrugada, e aqui aparece quanto tinha quando vocês colocaram e quanto tem agora.</p></div></div>
+    <div class="spy-list" id="spyList"></div>
   </div>
 
   <div id="view-con" hidden style="flex-direction:column;gap:20px">
@@ -365,6 +420,7 @@ const ICON = {
   zap:'<svg class="i" viewBox="0 0 24 24"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg>',
   copy:'<svg class="i" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg>',
   star:'<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4L2.8 9.5l6.4-.8z"/></svg>',
+  eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
   ext:'<svg class="i" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',
   x:'<svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   spark:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>',
@@ -379,6 +435,12 @@ const STORE = window.__MNR_STORE || {
   put(){ try { localStorage.setItem('minerador-salvas', JSON.stringify(salvas)) } catch {} },
   watch(){} };
 let salvas = STORE.load() || {};
+// espionagem: no app fica no banco (igual pra Kauã e Victor); na prévia, só neste navegador
+const SPY = STORE.espLoad ? { load: STORE.espLoad, put: STORE.espPut, watch: STORE.espWatch } : {
+  load(){ try { return JSON.parse(localStorage.getItem('minerador-espiao') || '{}') } catch { return {} } },
+  put(id, v, todas){ try { localStorage.setItem('minerador-espiao', JSON.stringify(todas)) } catch {} },
+  watch(){} };
+let espiao = SPY.load() || {};
 const guardar = (id) => STORE.put(id, id ? (salvas[id] || null) : null, salvas);
 
 const prep = (Dx) => Dx.ofertas.map(o => {
@@ -453,6 +515,7 @@ function card(o){
       ${o.a?.gancho ? `<div class="hook"><p>${esc(o.a.gancho)}</p></div>` : `<p class="raw">${esc(ad?.texto || ad?.titulo || 'Anúncio sem texto')}</p>`}
       ${facts ? `<div class="facts">${facts}</div>` : ''}
     </div>
+    <button class="eye" data-eye aria-pressed="${!!espiao[o.page_id]}" aria-label="${espiao[o.page_id]?'Parar de espionar':'Espionar oferta'}" title="${espiao[o.page_id]?'Espionando':'Espionar'}">${ICON.eye}</button>
     <button class="star" data-star aria-pressed="${!!s}" aria-label="${s?'Tirar das salvas':'Salvar oferta'}">${ICON.star}</button>
   </article>`;
 }
@@ -468,8 +531,6 @@ function story(o, i){
 
 function render(){
   const semCat = filtrar(true), lista = filtrar(false);
-  $('bqBan').hidden = !F.ids;
-  if (F.ids) $('bqBan').innerHTML = `<div><b>Resultado: “${esc(F.termo)}”</b><br><span>${F.ids.size} página${F.ids.size===1?'':'s'} achada${F.ids.size===1?'':'s'} indo pro WhatsApp · ${lista.length} com os filtros de agora</span></div><button class="btn" data-bqsair>Voltar pra mineração do dia</button>`;
   const k = {ativos:o=>o.ativos, calor:o=>o.calor, cresc:o=>o.cresc, dias:o=>o.diasRod, novas:o=>-o.diasRod}[F.ord];
   lista.sort((x,y) => k(y)-k(x) || y.ativos-x.ativos);
   const top = [...lista].sort((x,y)=>y.calor-x.calor).slice(0,10);
@@ -541,6 +602,7 @@ function abrir(id, tocar){
     <div class="dact">
       <a class="btn go" href="${o.biblioteca}" target="_blank" rel="noopener">${ICON.ext}Abrir todos na Biblioteca</a>
       <button class="btn sv" data-star-drawer="${id}" aria-pressed="${!!s}">${s?'Salva':'Salvar oferta'}</button>
+      <button class="btn ey" data-eye-drawer="${id}" aria-pressed="${!!espiao[id]}">${espiao[id]?'Espionando':'Espionar'}</button>
     </div>`;
   const dl = $('drawer'); if (!dl.open) { try { dl.showModal(); } catch { dl.setAttribute('open', ''); } }
   dl.scrollTop = 0;
@@ -596,9 +658,10 @@ $('fOrd').onchange = e => { F.ord = e.target.value; render(); };
 $('minAds').oninput = e => { F.minAds = +e.target.value; render(); };
 $('minDias').oninput = e => { F.minDias = +e.target.value; render(); };
 $('moreBtn').onclick = () => { const o = $('panel').hidden; $('panel').hidden = !o; $('moreBtn').setAttribute('aria-expanded', o); };
-const aba = v => { ['min','con','sav'].forEach(x => { $('tab-'+x).setAttribute('aria-selected', x===v); const el = $('view-'+x); el.hidden = x!==v; el.style.display = x===v ? (x==='sav'?'block':'flex') : 'none'; });
-  if (v==='sav') board(); if (v==='con') concorrentes(); };
-$('tab-min').onclick = () => aba('min'); $('tab-con').onclick = () => aba('con'); $('tab-sav').onclick = () => aba('sav');
+const ABAS = ['min','bus','con','esp','sav'];
+const aba = v => { ABAS.forEach(x => { $('tab-'+x).setAttribute('aria-selected', x===v); const el = $('view-'+x); el.hidden = x!==v; el.style.display = x===v ? (x==='sav'?'block':'flex') : 'none'; });
+  if (v==='sav') board(); if (v==='con') concorrentes(); if (v==='esp') renderSpy(); if (v==='bus') renderBq(); };
+ABAS.forEach(x => { $('tab-'+x).onclick = () => aba(x); });
 $('cOrd').onchange = e => { C.ord = e.target.value; concorrentes(); };
 // arrastar a faixa com o mouse
 (() => { const el = $('strip'); let down = false, x0 = 0, s0 = 0, moved = false;
@@ -611,49 +674,101 @@ $('cOrd').onchange = e => { C.ord = e.target.value; concorrentes(); };
   new ResizeObserver(fim).observe(el);
 })();
 // capas que chegam depois (o app mostra as ofertas na hora e completa as capas quando terminam de baixar)
-// ---------- busca sob demanda (só no app; a prévia não tem robô)
-let BUSCAS = [], bqPais = 'BR';
+// ---------- aba Buscar: busca sob demanda (o robô só existe no app) e histórico
+let BUSCAS = [], bqPais = 'BR', BQ_ABERTA = null;
 const minutos = iso => Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 6e4));
+const quando = iso => { const d = new Date(iso); return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); };
+const LUPA = '<svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>';
 function renderBq(){
-  $('bqList').innerHTML = BUSCAS.map(b => {
-    const st = b.status;
-    const sub = st === 'rodando' ? (minutos(b.em) > 20 ? 'não terminou, tente de novo' : `buscando · ${minutos(b.em)} min`)
-      : st === 'pronta' ? `${b.n || 0} ofertas · ver` : st === 'bloqueada' ? 'a Meta bloqueou, tente mais tarde' : 'deu erro';
-    return `<button class="bqi" data-bq="${esc(b.id)}" data-st="${esc(st)}" aria-pressed="${F.ids && F.bqId === b.id}">${st === 'rodando' && minutos(b.em) <= 20 ? '<span class="giro"></span>' : ''}<span style="min-width:0"><b>${esc(b.termo)}</b><br><small>${(b.paises||[]).map(p=>FLAG[p]||p).join(' ')} ${sub}</small></span></button>`;
-  }).join('');
+  $('histN').textContent = BUSCAS.length ? `${BUSCAS.length} busca${BUSCAS.length===1?'':'s'}` : '';
+  $('bqList').innerHTML = BUSCAS.length ? BUSCAS.map(b => {
+    const st = b.status, rodando = st === 'rodando' && minutos(b.em) <= 20;
+    const res = st === 'pronta' ? `${b.n || 0}<small>ofertas</small>` : rodando ? `<span class="giro" style="margin-left:auto"></span>`
+      : `<small style="color:var(--fire-2)">${st === 'rodando' ? 'não terminou' : st === 'bloqueada' ? 'Meta bloqueou' : 'deu erro'}</small>`;
+    const sub = rodando ? `buscando há ${minutos(b.em)} min` : quando(b.em);
+    return `<button class="hrow" data-bq="${esc(b.id)}" data-st="${esc(st)}" aria-pressed="${BQ_ABERTA === b.id}"><span class="ic">${LUPA}</span>
+      <span style="min-width:0"><b>${esc(b.termo)}</b><small>${(b.paises||[]).map(p=>FLAG[p]||p).join(' ')} · ${sub}${b.por ? ' · ' + esc(String(b.por).split('@')[0]) : ''}</small></span><span class="res num">${res}</span></button>`;
+  }).join('') : '<p class="note">Nenhuma busca ainda. Escreva o que quer minerar aí em cima.</p>';
 }
 function aplicaCapas(cap){ ofertas.forEach(o => o.anuncios.forEach(ad => { if (cap && cap[ad.id]) ad.capa = cap[ad.id]; })); }
+function renderRes(){
+  const b = BUSCAS.find(x => x.id === BQ_ABERTA);
+  if (!b) { $('bqRes').hidden = true; return; }
+  const ids = new Set(b.page_ids || []), lista = ofertas.filter(o => ids.has(o.page_id)).sort((x, y) => y.ativos - x.ativos);
+  $('bqRes').hidden = false;
+  $('bqBan').innerHTML = `<div><b>Resultado: “${esc(b.termo)}”</b><br><span>${lista.length} página${lista.length===1?'':'s'} indo pro WhatsApp · das mais escaladas pras menos</span></div><button class="btn" data-bqsair>Fechar resultado</button>`;
+  $('bqFeed').innerHTML = lista.length ? lista.map(card).join('') : '<div class="empty"><b>Nada indo pro WhatsApp</b>Tente um termo mais aberto, ou busque nos dois países.</div>';
+}
 async function abrirBusca(id){
   const b = BUSCAS.find(x => x.id === id); if (!b || b.status !== 'pronta') return;
-  $('bqMsg').className = 'bq-msg'; $('bqMsg').textContent = 'Abrindo o resultado…';
+  BQ_ABERTA = id; renderBq();
+  $('bqRes').hidden = false; $('bqBan').innerHTML = '<div><b>Abrindo o resultado…</b></div>'; $('bqFeed').innerHTML = '';
   try { const r = STORE.recarregar ? await STORE.recarregar() : null; if (r && r.D) { ofertas = prep(r.D); if (r.capas) aplicaCapas(r.capas); } } catch {}
-  Object.assign(F, { ids: new Set(b.page_ids || []), termo: b.termo, bqId: b.id, minAds: 0, minDias: 0, tipo: '', mod: '', pais: '' }); F.cats.clear();
-  $('fTipo').value = ''; $('fMod').value = '';
-  $('bqMsg').textContent = ''; render(); renderBq(); $('bqBan').scrollIntoView({ block: 'start', behavior: 'smooth' });
+  renderRes(); $('bqRes').scrollIntoView({ block: 'start', behavior: 'smooth' });
 }
-function sairBusca(){ Object.assign(F, { ids: null, termo: '', bqId: null, minAds: 20, tipo: 'digital' }); $('fTipo').value = 'digital'; render(); renderBq(); }
+function sairBusca(){ BQ_ABERTA = null; $('bqRes').hidden = true; renderBq(); }
 if (STORE.buscar) {
-  $('bq').hidden = false;
   $('bqPais').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; bqPais = b.dataset.v; $('bqPais').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); });
   $('bqForm').addEventListener('submit', async e => {
     e.preventDefault(); const termo = $('bqTermo').value.trim(), msg = $('bqMsg');
     if (termo.length < 3) { msg.className = 'bq-msg erro'; msg.textContent = 'Escreva o que quer buscar (3 letras ou mais).'; return; }
     $('bqGo').disabled = true; msg.className = 'bq-msg'; msg.textContent = 'Mandando o robô buscar…';
     try { const r = await STORE.buscar(termo, bqPais.split(','));
-      if (r && r.ok) { msg.className = 'bq-msg ok'; msg.textContent = `Robô buscando “${termo}”. Em uns 5 a 7 minutos aparece aqui embaixo; pode sair da tela que ele continua.`; $('bqTermo').value = ''; }
+      if (r && r.ok) { msg.className = 'bq-msg ok'; msg.textContent = `Robô buscando “${termo}”. Em poucos minutos aparece no histórico; pode sair da tela que ele continua.`; $('bqTermo').value = ''; }
       else { msg.className = 'bq-msg erro'; msg.textContent = (r && r.motivo) || 'Não deu pra mandar a busca agora.'; }
     } catch { msg.className = 'bq-msg erro'; msg.textContent = 'Sem conexão. Tente de novo.'; }
     $('bqGo').disabled = false;
   });
   if (STORE.watchBuscas) STORE.watchBuscas(lista => { BUSCAS = lista || []; renderBq(); });
   setInterval(() => { if (BUSCAS.some(b => b.status === 'rodando')) renderBq(); }, 60e3);
+} else {
+  $('bqGo').disabled = true; $('bqMsg').textContent = 'Na prévia a busca fica desligada; no app da VK ela manda o robô buscar.';
 }
-ROOT.addEventListener('click', e => {
-  const bi = e.target.closest('[data-bq]'); if (bi) { abrirBusca(bi.dataset.bq); return; }
-  if (e.target.closest('[data-bqsair]')) sairBusca();
-});
+renderBq();
 
-window.__MNR_CAPAS = cap => { ofertas.forEach(o => o.anuncios.forEach(ad => { if (cap && cap[ad.id]) ad.capa = cap[ad.id]; })); render(); if (!$('view-con').hidden) concorrentes(); if (!$('view-sav').hidden) board(); };
+// ---------- aba Espionagem
+const pct = (a, b) => a ? Math.round((b - a) / a * 100) : null;
+function sparkDesde(h, desde){
+  const pts = (h || []).filter(x => x.data >= desde);
+  return pts.length > 1 ? spark(pts).replace('class="spark"', 'class="spark" style="width:120px;height:34px"') : '';
+}
+function renderSpy(){
+  const ids = Object.keys(espiao);
+  $('nEsp').textContent = ids.length; $('nEsp').hidden = !ids.length;
+  const lista = ids.map(id => ({ o: ofertas.find(x => x.page_id === id), e: espiao[id] })).filter(x => x.o)
+    .sort((x, y) => (y.o.ativos - y.e.inicio) - (x.o.ativos - x.e.inicio));
+  $('spyList').innerHTML = lista.length ? lista.map(({ o, e }) => {
+    const d = o.ativos - (e.inicio || 0), p = pct(e.inicio, o.ativos), ult = (o.historico || []).at(-1);
+    const cls = d > 0 ? 'up' : d < 0 ? 'down' : 'eq';
+    return `<article class="spy" data-id="${o.page_id}" data-spy>${capa(o.anuncios[0])}
+      <div style="min-width:0"><h3>${esc(o.nome)}</h3><div class="cp">${o.paises.map(x=>FLAG[x]).join(' ')} ${esc(o.pagina)}</div>
+        <div class="since">Espionando há ${dias(e.em)} dia${dias(e.em)===1?'':'s'} · desde ${fmt(e.em)}${ult ? ` · contado em ${fmt(ult.data)}` : ''}</div>
+        <div class="vs"><div class="nb"><b class="num">${e.inicio ?? '—'}</b><small>quando colocou</small></div><span class="seta">→</span>
+          <div class="nb${o.fogo?' fire':''}"><b class="num">${o.ativos}</b><small>agora</small></div>
+          <span class="dif ${cls}">${d > 0 ? '▲ +' : d < 0 ? '▼ ' : ''}${d}${p != null && d ? ` (${p > 0 ? '+' : ''}${p}%)` : d ? '' : ' igual'}</span>${sparkDesde(o.historico, e.em)}</div>
+        <div class="acts"><button data-unspy="${o.page_id}">Parar de espionar</button></div></div></article>`;
+  }).join('') : '<div class="empty"><b>Nenhuma oferta em espionagem</b>Toque no olho de qualquer oferta (no card ou no painel dela) pra começar a acompanhar.</div>';
+}
+function toggleEspiao(id){
+  const o = ofertas.find(x => x.page_id === id); if (!o) return;
+  if (espiao[id]) delete espiao[id];
+  else espiao[id] = { em: new Date().toISOString().slice(0, 10), inicio: o.ativos };
+  SPY.put(id, espiao[id] || null, espiao);
+  render(); renderSpy(); if (!$('view-con').hidden) concorrentes(); if (BQ_ABERTA) renderRes();
+}
+SPY.watch(novas => { espiao = novas || {}; renderSpy(); render(); });
+renderSpy();
+ROOT.addEventListener('click', e => {
+  const t = e.target;
+  const ey = t.closest('[data-eye]'); if (ey) { e.stopPropagation(); toggleEspiao(ey.closest('[data-id]').dataset.id); return; }
+  const ed = t.closest('[data-eye-drawer]'); if (ed) { e.stopPropagation(); toggleEspiao(ed.dataset.eyeDrawer); abrir(ed.dataset.eyeDrawer); return; }
+  const un = t.closest('[data-unspy]'); if (un) { e.stopPropagation(); toggleEspiao(un.dataset.unspy); return; }
+  const sp = t.closest('[data-spy]'); if (sp) { abrir(sp.dataset.id, !!t.closest('.play')); return; }
+  const bi = t.closest('[data-bq]'); if (bi) { abrirBusca(bi.dataset.bq); return; }
+  if (t.closest('[data-bqsair]')) sairBusca();
+}, true);
+
+window.__MNR_CAPAS = cap => { ofertas.forEach(o => o.anuncios.forEach(ad => { if (cap && cap[ad.id]) ad.capa = cap[ad.id]; })); render(); renderSpy(); if (BQ_ABERTA) renderRes(); if (!$('view-con').hidden) concorrentes(); if (!$('view-sav').hidden) board(); };
 STORE.watch(novas => { salvas = novas || {}; render(); if (!$('view-sav').hidden) board(); if (!$('view-con').hidden) concorrentes(); });
 topo(); render(); concorrentes();
 </script>
