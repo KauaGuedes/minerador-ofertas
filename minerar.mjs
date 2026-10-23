@@ -104,8 +104,12 @@ async function main() {
         const aba = await abrir(page, url);
         const rolagens = SO_TESTE ? 2 : CONFIG.rolagensPorBusca;
         for (let i = 0; i < rolagens; i++) {
-          await page.mouse.wheel(0, aleatorio(4000, 7000));
-          await espera(aleatorio(2500, 4500));
+          const antes = aba.respostas.length;
+          await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+          await page.mouse.wheel(0, aleatorio(1500, 3000));
+          for (let t = 0; t < 10 && aba.respostas.length === antes; t++) await espera(800);
+          await espera(aleatorio(1200, 2500));
+          if (aba.respostas.length === antes) break; // acabaram os resultados
         }
         const html = await page.content();
         aba.parar();
