@@ -3,6 +3,7 @@ import fs from 'node:fs';
 const raiz = new URL('../', import.meta.url);
 const ler = (p) => JSON.parse(fs.readFileSync(new URL(p, raiz)));
 const dados = ler('data/ofertas.json');
+const thumbs = process.env.THUMBS && fs.existsSync(process.env.THUMBS) ? JSON.parse(fs.readFileSync(process.env.THUMBS)) : {};
 const analise = fs.existsSync(new URL('data/analise.json', raiz)) ? ler('data/analise.json').ofertas : {};
 
 export function pacote() {
@@ -12,7 +13,7 @@ export function pacote() {
     primeira_vez: o.primeira_vez, historico: o.historico, biblioteca: o.biblioteca,
     anuncios: (o.anuncios || []).slice(0, 4).map((a) => ({
       id: a.id, inicio: a.inicio, duplicado: a.duplicado, titulo: (a.titulo || '').slice(0, 120),
-      texto: (a.texto || '').slice(0, 450), video: !!a.video,
+      texto: (a.texto || '').slice(0, 450), video: !!a.video, capa: thumbs[a.id] || null,
     })),
     analise: analise[o.page_id] || null,
   }));
