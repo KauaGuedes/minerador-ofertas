@@ -1,37 +1,465 @@
 {
- "data": "2026-10-23T17:19:00.736Z",
+ "data": "2026-10-23T17:24:35.058Z",
  "buscas": [
   {
    "pais": "BR",
    "palavra": "pague depois",
+   "tipo": "all",
    "status": 403,
    "anuncios": 30,
    "whatsapp": 12
   },
   {
    "pais": "BR",
+   "palavra": "pague depois",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 19
+  },
+  {
+   "pais": "BR",
+   "palavra": "pague depois",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 25,
+   "whatsapp": 10
+  },
+  {
+   "pais": "BR",
    "palavra": "pague só depois",
+   "tipo": "all",
    "status": 200,
    "anuncios": 29,
    "whatsapp": 18
   },
   {
+   "pais": "BR",
+   "palavra": "pague só depois",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 18
+  },
+  {
+   "pais": "BR",
+   "palavra": "pague só depois",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 7,
+   "whatsapp": 3
+  },
+  {
+   "pais": "BR",
+   "palavra": "receba primeiro",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 3
+  },
+  {
+   "pais": "BR",
+   "palavra": "receba primeiro",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 7
+  },
+  {
+   "pais": "BR",
+   "palavra": "receba primeiro",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 28,
+   "whatsapp": 4
+  },
+  {
+   "pais": "BR",
+   "palavra": "receba agora e pague depois",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 26
+  },
+  {
+   "pais": "BR",
+   "palavra": "receba agora e pague depois",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 27
+  },
+  {
+   "pais": "BR",
+   "palavra": "receba agora e pague depois",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 0,
+   "whatsapp": 0
+  },
+  {
+   "pais": "BR",
+   "palavra": "apostila",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 13
+  },
+  {
+   "pais": "BR",
+   "palavra": "apostila",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 15
+  },
+  {
+   "pais": "BR",
+   "palavra": "apostila",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 20,
+   "whatsapp": 1
+  },
+  {
+   "pais": "BR",
+   "palavra": "material em PDF",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 6
+  },
+  {
+   "pais": "BR",
+   "palavra": "material em PDF",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 9
+  },
+  {
+   "pais": "BR",
+   "palavra": "material em PDF",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 21,
+   "whatsapp": 3
+  },
+  {
+   "pais": "BR",
+   "palavra": "passo a passo PDF",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 28,
+   "whatsapp": 10
+  },
+  {
+   "pais": "BR",
+   "palavra": "passo a passo PDF",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 28,
+   "whatsapp": 11
+  },
+  {
+   "pais": "BR",
+   "palavra": "passo a passo PDF",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 25,
+   "whatsapp": 0
+  },
+  {
+   "pais": "BR",
+   "palavra": "guia completo",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 6
+  },
+  {
+   "pais": "BR",
+   "palavra": "guia completo",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 9
+  },
+  {
+   "pais": "BR",
+   "palavra": "guia completo",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 18,
+   "whatsapp": 0
+  },
+  {
+   "pais": "BR",
+   "palavra": "e-book",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 0
+  },
+  {
+   "pais": "BR",
+   "palavra": "e-book",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 0
+  },
+  {
+   "pais": "BR",
+   "palavra": "e-book",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 28,
+   "whatsapp": 0
+  },
+  {
+   "pais": "BR",
+   "palavra": "material digital",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 7
+  },
+  {
+   "pais": "BR",
+   "palavra": "material digital",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 10
+  },
+  {
+   "pais": "BR",
+   "palavra": "material digital",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 22,
+   "whatsapp": 5
+  },
+  {
    "pais": "MX",
    "palavra": "paga después",
+   "tipo": "all",
    "status": 200,
    "anuncios": 30,
    "whatsapp": 7
   },
   {
    "pais": "MX",
+   "palavra": "paga después",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 9
+  },
+  {
+   "pais": "MX",
+   "palavra": "paga después",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 1
+  },
+  {
+   "pais": "MX",
    "palavra": "pagas después",
+   "tipo": "all",
    "status": 200,
    "anuncios": 30,
    "whatsapp": 13
+  },
+  {
+   "pais": "MX",
+   "palavra": "pagas después",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 13
+  },
+  {
+   "pais": "MX",
+   "palavra": "pagas después",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 1
+  },
+  {
+   "pais": "MX",
+   "palavra": "recibe primero",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 26,
+   "whatsapp": 11
+  },
+  {
+   "pais": "MX",
+   "palavra": "recibe primero",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 27,
+   "whatsapp": 12
+  },
+  {
+   "pais": "MX",
+   "palavra": "recibe primero",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 0
+  },
+  {
+   "pais": "MX",
+   "palavra": "guía PDF",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 18
+  },
+  {
+   "pais": "MX",
+   "palavra": "guía PDF",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 18
+  },
+  {
+   "pais": "MX",
+   "palavra": "guía PDF",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 28
+  },
+  {
+   "pais": "MX",
+   "palavra": "manual en PDF",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 18
+  },
+  {
+   "pais": "MX",
+   "palavra": "manual en PDF",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 16
+  },
+  {
+   "pais": "MX",
+   "palavra": "manual en PDF",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 13,
+   "whatsapp": 5
+  },
+  {
+   "pais": "MX",
+   "palavra": "paso a paso PDF",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 27
+  },
+  {
+   "pais": "MX",
+   "palavra": "paso a paso PDF",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 25
+  },
+  {
+   "pais": "MX",
+   "palavra": "paso a paso PDF",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 27
+  },
+  {
+   "pais": "MX",
+   "palavra": "ebook",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 2
+  },
+  {
+   "pais": "MX",
+   "palavra": "ebook",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 4
+  },
+  {
+   "pais": "MX",
+   "palavra": "ebook",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 28,
+   "whatsapp": 1
+  },
+  {
+   "pais": "MX",
+   "palavra": "material digital",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 19
+  },
+  {
+   "pais": "MX",
+   "palavra": "material digital",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 26
+  },
+  {
+   "pais": "MX",
+   "palavra": "material digital",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 20,
+   "whatsapp": 9
+  },
+  {
+   "pais": "MX",
+   "palavra": "curso PDF",
+   "tipo": "all",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 22
+  },
+  {
+   "pais": "MX",
+   "palavra": "curso PDF",
+   "tipo": "video",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 21
+  },
+  {
+   "pais": "MX",
+   "palavra": "curso PDF",
+   "tipo": "image",
+   "status": 200,
+   "anuncios": 3,
+   "whatsapp": 2
   }
  ],
  "erros": [],
  "bloqueado": false,
- "anunciantes": 27,
- "contados": 10
+ "anunciantes": 204,
+ "contados": 120
 }
