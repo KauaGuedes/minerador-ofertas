@@ -1,0 +1,384 @@
+<title>Minerador VK</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: cabeçalho do app VK > resumo em blocos > painel de filtros > grade de cards de oferta; aba Salvas em quadro por status */
+:root{
+  --bg:#050507; --surface:#161618; --surface-2:#1f1f22; --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.07);
+  --fg:#ececf0; --muted:#8b919c; --dim:#5d626c;
+  --green:#2ee88a; --green-ink:#06130c; --green-soft:rgba(46,232,138,.12);
+  --red:#ff6b6b; --red-soft:rgba(255,107,107,.13); --yellow:#f7d84a; --yellow-soft:rgba(247,216,74,.13);
+  --blue:#7cb4ff; --blue-soft:rgba(124,180,255,.13);
+  --chip-on:#ffffff; --chip-on-fg:#111113;
+  --f-display:"Urbanist","Manrope",system-ui,sans-serif; --f-body:"DM Sans",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,monospace;
+  --r-lg:28px; --r-md:18px; --r-sm:12px;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
+  --bg:#f3f4f6; --surface:#ffffff; --surface-2:#f0f1f3; --line:rgba(10,12,20,.12); --line-soft:rgba(10,12,20,.07);
+  --fg:#121317; --muted:#5c616b; --dim:#8b909a; --green:#119a57; --green-ink:#ffffff; --green-soft:rgba(17,154,87,.1);
+  --red:#d63b3b; --red-soft:rgba(214,59,59,.1); --yellow:#a87d00; --yellow-soft:rgba(200,150,0,.12); --blue:#2563c9; --blue-soft:rgba(37,99,201,.1);
+  --chip-on:#121317; --chip-on-fg:#ffffff; color-scheme:light }}
+:root[data-theme="light"]{
+  --bg:#f3f4f6; --surface:#ffffff; --surface-2:#f0f1f3; --line:rgba(10,12,20,.12); --line-soft:rgba(10,12,20,.07);
+  --fg:#121317; --muted:#5c616b; --dim:#8b909a; --green:#119a57; --green-ink:#ffffff; --green-soft:rgba(17,154,87,.1);
+  --red:#d63b3b; --red-soft:rgba(214,59,59,.1); --yellow:#a87d00; --yellow-soft:rgba(200,150,0,.12); --blue:#2563c9; --blue-soft:rgba(37,99,201,.1);
+  --chip-on:#121317; --chip-on-fg:#ffffff; color-scheme:light }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 60px}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* cabeçalho */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.crumb{color:var(--muted);font-size:13px}
+.crumb b{color:var(--fg);font-weight:600}
+h1{font-family:var(--f-display);font-weight:500;font-size:clamp(30px,5vw,40px);line-height:1.1;margin:4px 0 6px;text-wrap:balance}
+.sub{color:var(--muted);max-width:62ch;margin:0}
+.meta{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px var(--green-soft)}
+
+/* abas */
+.tabs{display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--surface);border:1px solid var(--line);width:max-content;max-width:100%;overflow-x:auto}
+.tab{border:0;background:transparent;padding:8px 18px;border-radius:999px;cursor:pointer;color:var(--muted);font-weight:600;white-space:nowrap;display:flex;gap:8px;align-items:center}
+.tab[aria-selected="true"]{background:var(--chip-on);color:var(--chip-on-fg)}
+.count{font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--green);color:var(--green-ink)}
+
+/* resumo */
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.stat .k{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.stat .v{font-family:var(--f-display);font-size:28px;font-weight:600;line-height:1.1}
+.stat .s{font-size:12px;color:var(--muted)}
+.stat.hot .v{color:var(--red)} .stat.up .v{color:var(--yellow)} .stat.ok .v{color:var(--green)}
+@media (max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stats .stat:first-child{grid-column:1/-1}}
+
+/* filtros */
+.filters{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;display:flex;flex-direction:column;gap:16px}
+.frow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.frow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field>span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+select,input[type=search]{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:9px 12px;width:100%}
+.range{display:flex;flex-direction:column;gap:8px}
+.range-head{display:flex;justify-content:space-between;align-items:baseline}
+.range-head b{font-family:var(--f-mono);font-size:13px;color:var(--green)}
+input[type=range]{width:100%;accent-color:var(--green)}
+.quick{display:flex;gap:6px;flex-wrap:wrap}
+.q{border:1px solid var(--line);background:transparent;border-radius:999px;padding:3px 11px;font-size:12px;cursor:pointer;color:var(--muted);font-weight:600}
+.q[aria-pressed="true"]{background:var(--chip-on);color:var(--chip-on-fg);border-color:transparent}
+.cats{display:flex;gap:6px;flex-wrap:wrap}
+.cat{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;color:var(--fg);display:flex;gap:6px;align-items:center}
+.cat i{font-style:normal;color:var(--muted);font-family:var(--f-mono);font-size:11px}
+.cat[aria-pressed="true"]{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.cat[aria-pressed="true"] i{color:var(--green)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bar .l{display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:var(--muted)}
+.bar .l b{color:var(--fg)}
+.bar select{width:auto}
+.toggle{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;cursor:pointer;font-weight:600;font-size:13px}
+.toggle[aria-pressed="true"]{border-color:var(--yellow);color:var(--yellow);background:var(--yellow-soft)}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,370px),1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card.saved{border-color:var(--yellow)}
+.chead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.flag{font-family:var(--f-mono);font-size:11px;font-weight:500;padding:2px 7px;border-radius:6px;border:1px solid var(--line);color:var(--muted)}
+.pill{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-flex;gap:5px;align-items:center}
+.lv-muito{background:var(--red-soft);color:var(--red)} .lv-escalada{background:var(--yellow-soft);color:var(--yellow)} .lv-validacao{background:var(--blue-soft);color:var(--blue)}
+.mod-alta{background:var(--green-soft);color:var(--green)} .mod-media{background:var(--surface-2);color:var(--muted)}
+.trend{font-size:11.5px;font-weight:700;color:var(--green)}
+.star{margin-left:auto;border:0;background:transparent;cursor:pointer;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--dim)}
+.star:hover{background:var(--surface-2)}
+.star[aria-pressed="true"]{color:var(--yellow)}
+.star svg{width:20px;height:20px}
+.ctitle{font-family:var(--f-display);font-size:19px;font-weight:600;line-height:1.25;margin:0;text-wrap:balance}
+.cpage{color:var(--muted);font-size:13px;margin-top:-6px}
+.cpage a{color:inherit}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.kv div{background:var(--surface-2);border-radius:var(--r-sm);padding:8px 10px;min-width:0}
+.kv span{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.kv b{display:block;font-weight:600;font-size:13.5px;overflow-wrap:anywhere}
+.kv .big{font-family:var(--f-display);font-size:20px}
+.blk{display:flex;flex-direction:column;gap:2px}
+.blk span{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.blk p{margin:0}
+.hook{border-left:3px solid var(--red);padding:2px 0 2px 10px}
+.hook p{font-style:italic}
+.obs p{color:var(--muted)}
+.noan{color:var(--muted);font-size:13px;background:var(--surface-2);border-radius:var(--r-sm);padding:10px 12px}
+.noan p{margin:6px 0 0;color:var(--fg);font-size:13px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+details.ads summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600}
+.ad{border-top:1px solid var(--line-soft);padding:10px 0 2px;display:flex;flex-direction:column;gap:4px}
+.ad .h{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.ad p{margin:0;font-size:13px;white-space:pre-line;max-height:9.5em;overflow:auto}
+.ad a{color:var(--green);font-size:12.5px;font-weight:600}
+.cfoot{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+.btn{border-radius:999px;padding:9px 16px;font-weight:700;font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--fg)}
+.btn.main{background:var(--green);color:var(--green-ink);border-color:transparent}
+.cfoot select{width:auto;padding:7px 10px;font-size:13px}
+.since{color:var(--dim);font-size:12px;font-family:var(--f-mono)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:48px 16px;background:var(--surface);border:1px dashed var(--line);border-radius:var(--r-lg)}
+.empty b{display:block;color:var(--fg);font-family:var(--f-display);font-size:20px;margin-bottom:4px}
+
+/* salvas */
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:start}
+@media (max-width:1000px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.board{grid-template-columns:1fr}}
+.col{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.col h3{margin:0;font-size:13px;display:flex;justify-content:space-between;align-items:center;font-weight:700}
+.col h3 i{font-style:normal;color:var(--muted);font-family:var(--f-mono);font-size:12px}
+.mini{background:var(--surface-2);border-radius:var(--r-sm);padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.mini b{font-size:14px;line-height:1.3}
+.mini .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.mini textarea{width:100%;min-height:52px;resize:vertical;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font:inherit;font-size:12.5px;color:var(--fg)}
+.mini select{padding:5px 8px;font-size:12px;width:auto}
+.mini a{color:var(--green);font-size:12px;font-weight:600}
+.colempty{color:var(--dim);font-size:12.5px;padding:6px 2px}
+.note{font-size:12.5px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:10px 14px}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="crumb">VK Company / <b>Minerador</b></div>
+      <h1>Minerador de ofertas</h1>
+      <p class="sub">Ofertas indo pro WhatsApp na Biblioteca de Anúncios, Brasil e México, com quantos anúncios ativos cada anunciante tem e a análise de cada uma.</p>
+    </div>
+    <div class="meta"><span class="dot"></span><span id="upd"></span></div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-min" aria-selected="true">Mineração</button>
+    <button class="tab" role="tab" id="tab-sav" aria-selected="false">Salvas <span class="count" id="savedCount">0</span></button>
+  </div>
+
+  <section id="view-min" style="display:flex;flex-direction:column;gap:18px">
+    <div class="stats" id="stats"></div>
+
+    <div class="filters">
+      <div class="frow">
+        <label class="field"><span>País</span>
+          <select id="fPais"><option value="">Todos</option><option value="BR">Brasil</option><option value="MX">México</option></select></label>
+        <label class="field"><span>Nível de escala</span>
+          <select id="fNivel"><option value="">Todos</option><option value="muito">Muito escalada (50+)</option><option value="escalada">Escalada (20 a 49)</option><option value="validacao">Em validação (até 19)</option></select></label>
+        <label class="field"><span>Tipo de oferta</span>
+          <select id="fTipo"><option value="digital">Só produto digital</option><option value="">Todos os tipos</option><option value="fisico">Produto físico</option><option value="servico">Serviço</option></select></label>
+        <label class="field"><span>Vale modelar</span>
+          <select id="fMod"><option value="">Todas</option><option value="alta">Só as boas pra modelar</option><option value="analisada">Só as já analisadas</option></select></label>
+      </div>
+      <div class="frow" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))">
+        <div class="range">
+          <div class="range-head"><span class="field"><span>Mín. anúncios ativos</span></span><b id="minAdsV" class="num">20</b></div>
+          <input type="range" id="minAds" min="0" max="250" step="1" value="20">
+          <div class="quick" id="quickAds"></div>
+        </div>
+        <div class="range">
+          <div class="range-head"><span class="field"><span>Mín. dias rodando</span></span><b id="minDiasV" class="num">0</b></div>
+          <input type="range" id="minDias" min="0" max="365" step="1" value="0">
+          <div class="quick" id="quickDias"></div>
+        </div>
+      </div>
+      <div class="field"><span>Categoria</span><div class="cats" id="cats"></div></div>
+      <label class="field"><span>Busca livre</span>
+        <input type="search" id="fBusca" placeholder="Página, produto, ângulo, gancho, texto do anúncio…"></label>
+    </div>
+
+    <div class="bar">
+      <div class="l">Mostrando <b id="shown" class="num">0</b> de <b id="total" class="num">0</b>
+        <select id="fOrd" aria-label="Ordenar">
+          <option value="ativos">Mais anúncios ativos</option>
+          <option value="cresc">Mais cresceram</option>
+          <option value="dias">Mais tempo rodando</option>
+          <option value="novas">Mais novas</option>
+          <option value="dup">Criativo mais duplicado</option>
+        </select>
+      </div>
+      <button class="toggle" id="fSalvas" aria-pressed="false">★ Só salvas</button>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="view-sav" hidden style="flex-direction:column;gap:14px">
+    <p class="note">Prévia: aqui as salvas ficam só neste navegador. No app da VK elas vão ficar no banco, e você e o Victor veem as mesmas.</p>
+    <div class="board" id="board"></div>
+  </section>
+</div>
+
+<script id="dados" type="application/json">__DATA__</script>
+<script>
+const D = JSON.parse(document.getElementById('dados').textContent);
+const HOJE = new Date(D.atualizado);
+const STATUS = [['analisar','Pra analisar'],['modelando','Modelando'],['rodando','Rodando'],['descartada','Descartada']];
+const DIGITAL_RE = /\b(pdf|apostila|e-?book|guia|gu[ií]a|receit|recet|curso|moldes?|cuadernillo|material|manual|videoaula|imprim|planilha|kit de|projetos|exerc[ií]cios|ejercicios|plantilla|recetario)\b/i;
+
+const store = {
+  get(){ try{ return JSON.parse(localStorage.getItem('minerador-salvas')||'{}') }catch{ return {} } },
+  set(v){ try{ localStorage.setItem('minerador-salvas', JSON.stringify(v)) }catch{} }
+};
+let salvas = store.get();
+
+const fmtDate = s => s ? s.split('-').reverse().join('/') : '';
+const dias = s => s ? Math.max(0, Math.round((HOJE - new Date(s)) / 864e5)) : 0;
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const ofertas = D.ofertas.map(o => {
+  const a = o.analise || null;
+  const texto = o.anuncios.map(x => x.titulo + ' ' + x.texto).join(' ');
+  const tipo = a ? a.tipo : (DIGITAL_RE.test(texto) ? 'digital' : 'outro');
+  const ativos = o.ativos ?? 0;
+  const nivel = ativos >= 50 ? 'muito' : ativos >= 20 ? 'escalada' : 'validacao';
+  const h = o.historico || [];
+  const cresc = h.length > 1 ? h[h.length-1].ativos - h[Math.max(0, h.length-8)].ativos : 0;
+  return { ...o, a, tipo, ativos, nivel, cresc, diasRod: dias(o.anuncio_mais_antigo),
+    categoria: a?.categoria || 'Sem análise', busca: (o.pagina + ' ' + texto + ' ' + (a ? Object.values(a).join(' ') : '')).toLowerCase() };
+});
+
+const $ = id => document.getElementById(id);
+const nivelTxt = {muito:'Muito escalada', escalada:'Escalada', validacao:'Em validação'};
+$('upd').textContent = 'Minerado em ' + fmtDate(D.atualizado) + ' · ' + ofertas.length + ' anunciantes';
+
+// filtros rápidos
+const quick = (el, vals, input, suf) => {
+  el.innerHTML = vals.map(v => `<button class="q" data-v="${v}">${v}${suf}</button>`).join('');
+  el.onclick = e => { const b = e.target.closest('.q'); if(!b) return; input.value = b.dataset.v; input.dispatchEvent(new Event('input')); };
+};
+quick($('quickAds'), [0,20,30,50,100], $('minAds'), '+');
+quick($('quickDias'), [0,7,15,30,60], $('minDias'), ' dias');
+let catSel = new Set();
+
+function filtrar(ignorarCat){
+  const pais = $('fPais').value, nivel = $('fNivel').value, tipo = $('fTipo').value, mod = $('fMod').value;
+  const minA = +$('minAds').value, minD = +$('minDias').value, q = $('fBusca').value.trim().toLowerCase(), so = $('fSalvas').getAttribute('aria-pressed') === 'true';
+  return ofertas.filter(o =>
+    (!pais || o.paises.includes(pais)) && (!nivel || o.nivel === nivel) &&
+    (!tipo || (tipo === 'digital' ? o.tipo === 'digital' : o.tipo === tipo)) &&
+    (!mod || (mod === 'alta' ? o.a?.modelar === 'alta' : !!o.a)) &&
+    o.ativos >= minA && o.diasRod >= minD && (!q || o.busca.includes(q)) &&
+    (!so || salvas[o.page_id]) && (ignorarCat || !catSel.size || catSel.has(o.categoria)));
+}
+
+function stats(lista){
+  const p = c => lista.filter(o => o.paises.includes(c)).length;
+  const novas = lista.filter(o => o.primeira_vez === D.atualizado).length;
+  $('stats').innerHTML = `
+    <div class="stat"><span class="k">Ofertas</span><span class="v num">${lista.length}</span><span class="s">com os filtros de agora</span></div>
+    <div class="stat"><span class="k">Por país</span><span class="v num" style="font-size:22px">BR ${p('BR')} · MX ${p('MX')}</span><span class="s">algumas rodam nos dois</span></div>
+    <div class="stat hot"><span class="k">Muito escaladas</span><span class="v num">${lista.filter(o=>o.nivel==='muito').length}</span><span class="s">50+ anúncios ativos</span></div>
+    <div class="stat up"><span class="k">Escaladas</span><span class="v num">${lista.filter(o=>o.nivel==='escalada').length}</span><span class="s">20 a 49 ativos</span></div>
+    <div class="stat ok"><span class="k">Boas pra modelar</span><span class="v num">${lista.filter(o=>o.a?.modelar==='alta').length}</span><span class="s">pela análise</span></div>`;
+}
+
+function cats(lista){
+  const c = {}; lista.forEach(o => c[o.categoria] = (c[o.categoria]||0) + 1);
+  $('cats').innerHTML = Object.entries(c).sort((a,b)=>b[1]-a[1]).map(([k,n]) =>
+    `<button class="cat" aria-pressed="${catSel.has(k)}" data-c="${esc(k)}">${esc(k)} <i>${n}</i></button>`).join('');
+}
+
+const starSvg = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4L2.8 9.5l6.4-.8z"/></svg>';
+
+function card(o){
+  const a = o.a, s = salvas[o.page_id];
+  const ads = o.anuncios.slice(0,4).map(x => `
+    <div class="ad"><div class="h"><span>Desde ${fmtDate(x.inicio)}</span><span>${x.duplicado}× duplicado</span>${x.video?'<span>vídeo</span>':''}</div>
+      ${x.titulo?`<b style="font-size:13px">${esc(x.titulo)}</b>`:''}<p>${esc(x.texto)||'<i>Anúncio sem texto</i>'}</p>
+      <a href="https://www.facebook.com/ads/library/?id=${x.id}" target="_blank" rel="noopener">Ver esse anúncio na Biblioteca ↗</a></div>`).join('');
+  const corpo = a ? `
+      <div class="kv">
+        <div><span>Anúncios</span><b class="big num">${o.ativos}</b></div>
+        <div><span>Dias</span><b class="big num">${o.diasRod}</b></div>
+        <div><span>Funil</span><b>WhatsApp</b></div>
+        <div><span>Preço</span><b>${esc(a.preco||'Não identificado')}</b></div>
+        <div><span>Entrega</span><b>${esc(a.entrega||'—')}</b></div>
+        <div><span>Duplicação</span><b class="num">${o.maior_duplicacao}×</b></div>
+      </div>
+      ${a.angulo?`<div class="blk"><span>Ângulo</span><p>${esc(a.angulo)}</p></div>`:''}
+      ${a.gancho?`<div class="blk hook"><span>Gancho</span><p>“${esc(a.gancho)}”</p></div>`:''}
+      ${a.obs?`<div class="blk obs"><span>Análise</span><p>${esc(a.obs)}</p></div>`:''}` : `
+      <div class="kv">
+        <div><span>Anúncios</span><b class="big num">${o.ativos||'—'}</b></div>
+        <div><span>Dias</span><b class="big num">${o.diasRod}</b></div>
+        <div><span>Duplicação</span><b class="num">${o.maior_duplicacao}×</b></div>
+      </div>
+      <div class="noan">Ainda sem análise. Texto do anúncio principal:<p>${esc(o.anuncios[0]?.texto || o.anuncios[0]?.titulo || 'Anúncio sem texto')}</p></div>`;
+  return `<article class="card${s?' saved':''}" data-id="${o.page_id}">
+    <div class="chead">
+      ${o.paises.map(p=>`<span class="flag">${p}</span>`).join('')}
+      <span class="pill lv-${o.nivel}">${nivelTxt[o.nivel]}</span>
+      ${a?.modelar==='alta'?'<span class="pill mod-alta">Boa pra modelar</span>':''}
+      ${o.cresc>0?`<span class="trend">▲ ${o.cresc} na semana</span>`:''}
+      <button class="star" aria-pressed="${!!s}" aria-label="${s?'Remover das salvas':'Salvar oferta'}" data-act="star">${starSvg}</button>
+    </div>
+    <h2 class="ctitle">${esc(a?.produto || o.pagina)}</h2>
+    <div class="cpage">${esc(o.pagina)} · ${esc(o.categoria)}</div>
+    ${corpo}
+    <details class="ads"><summary>Ver ${o.anuncios.length} anúncios dessa página</summary>${ads}</details>
+    <div class="cfoot">
+      <a class="btn main" href="${o.biblioteca}" target="_blank" rel="noopener">Abrir na Biblioteca ↗</a>
+      ${s?`<select data-act="status" aria-label="Status">${STATUS.map(([v,t])=>`<option value="${v}"${s.status===v?' selected':''}>${t}</option>`).join('')}</select>`:''}
+      <span class="since">desde ${fmtDate(o.anuncio_mais_antigo)}</span>
+    </div>
+  </article>`;
+}
+
+function render(){
+  const semCat = filtrar(true), lista = filtrar(false);
+  const ord = $('fOrd').value;
+  const k = {ativos:o=>o.ativos, cresc:o=>o.cresc, dias:o=>o.diasRod, novas:o=>-o.diasRod, dup:o=>o.maior_duplicacao}[ord];
+  lista.sort((x,y)=>k(y)-k(x) || y.ativos-x.ativos);
+  stats(lista); cats(semCat);
+  $('shown').textContent = lista.length; $('total').textContent = ofertas.length;
+  $('minAdsV').textContent = $('minAds').value + '+'; $('minDiasV').textContent = $('minDias').value + ' dias';
+  document.querySelectorAll('#quickAds .q').forEach(b=>b.setAttribute('aria-pressed', b.dataset.v===$('minAds').value));
+  document.querySelectorAll('#quickDias .q').forEach(b=>b.setAttribute('aria-pressed', b.dataset.v===$('minDias').value));
+  $('grid').innerHTML = lista.length ? lista.map(card).join('') :
+    `<div class="empty"><b>Nenhuma oferta com esses filtros</b>Baixe o mínimo de anúncios ativos ou troque o tipo de oferta.</div>`;
+  $('savedCount').textContent = Object.keys(salvas).length;
+}
+
+function board(){
+  const ids = Object.keys(salvas);
+  $('board').innerHTML = STATUS.map(([v,t]) => {
+    const itens = ids.filter(id => salvas[id].status === v).map(id => ofertas.find(o=>o.page_id===id)).filter(Boolean);
+    return `<div class="col"><h3>${t} <i>${itens.length}</i></h3>${itens.length ? itens.map(o => `
+      <div class="mini" data-id="${o.page_id}">
+        <b>${esc(o.a?.produto || o.pagina)}</b>
+        <div class="row">${o.paises.join(' · ')} · <span class="num">${o.ativos} ativos</span> · salva em ${fmtDate(salvas[o.page_id].em)}</div>
+        <textarea data-act="nota" placeholder="Anotação: preço que vamos usar, ideia de gancho…">${esc(salvas[o.page_id].nota||'')}</textarea>
+        <div class="row"><select data-act="status" aria-label="Status">${STATUS.map(([sv,st])=>`<option value="${sv}"${sv===v?' selected':''}>${st}</option>`).join('')}</select>
+          <a href="${o.biblioteca}" target="_blank" rel="noopener">Biblioteca ↗</a></div>
+      </div>`).join('') : '<div class="colempty">Nada aqui ainda</div>'}</div>`;
+  }).join('');
+}
+
+function salvar(){ store.set(salvas); }
+document.addEventListener('click', e => {
+  const st = e.target.closest('[data-act="star"]'); if (st) {
+    const id = st.closest('.card').dataset.id;
+    if (salvas[id]) delete salvas[id]; else salvas[id] = {status:'analisar', em: new Date().toISOString().slice(0,10), nota:''};
+    salvar(); render(); return;
+  }
+  const c = e.target.closest('.cat'); if (c) { const k = c.dataset.c; catSel.has(k) ? catSel.delete(k) : catSel.add(k); render(); }
+});
+document.addEventListener('change', e => {
+  if (e.target.dataset.act === 'status') { const id = e.target.closest('[data-id]').dataset.id; salvas[id].status = e.target.value; salvar(); render(); board(); }
+});
+document.addEventListener('input', e => {
+  if (e.target.dataset.act === 'nota') { const id = e.target.closest('[data-id]').dataset.id; salvas[id].nota = e.target.value; salvar(); }
+});
+['fPais','fNivel','fTipo','fMod','fOrd'].forEach(id => $(id).addEventListener('change', render));
+['minAds','minDias','fBusca'].forEach(id => $(id).addEventListener('input', render));
+$('fSalvas').onclick = () => { $('fSalvas').setAttribute('aria-pressed', $('fSalvas').getAttribute('aria-pressed') !== 'true'); render(); };
+const abrir = v => { const m = v === 'min'; $('tab-min').setAttribute('aria-selected', m); $('tab-sav').setAttribute('aria-selected', !m);
+  $('view-min').hidden = !m; $('view-sav').hidden = m; $('view-sav').style.display = m ? 'none' : 'flex'; $('view-min').style.display = m ? 'flex' : 'none'; if (!m) board(); };
+$('tab-min').onclick = () => abrir('min'); $('tab-sav').onclick = () => abrir('sav');
+render();
+</script>
