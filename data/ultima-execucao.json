@@ -1,13 +1,13 @@
 {
- "data": "2026-10-23T17:24:35.058Z",
+ "data": "2026-10-24T11:41:53.089Z",
  "buscas": [
   {
    "pais": "BR",
    "palavra": "pague depois",
    "tipo": "all",
    "status": 403,
-   "anuncios": 30,
-   "whatsapp": 12
+   "anuncios": 29,
+   "whatsapp": 9
   },
   {
    "pais": "BR",
@@ -15,15 +15,15 @@
    "tipo": "video",
    "status": 200,
    "anuncios": 29,
-   "whatsapp": 19
+   "whatsapp": 18
   },
   {
    "pais": "BR",
    "palavra": "pague depois",
    "tipo": "image",
    "status": 200,
-   "anuncios": 25,
-   "whatsapp": 10
+   "anuncios": 26,
+   "whatsapp": 13
   },
   {
    "pais": "BR",
@@ -31,7 +31,7 @@
    "tipo": "all",
    "status": 200,
    "anuncios": 29,
-   "whatsapp": 18
+   "whatsapp": 16
   },
   {
    "pais": "BR",
@@ -39,15 +39,15 @@
    "tipo": "video",
    "status": 200,
    "anuncios": 29,
-   "whatsapp": 18
+   "whatsapp": 16
   },
   {
    "pais": "BR",
    "palavra": "pague só depois",
    "tipo": "image",
    "status": 200,
-   "anuncios": 7,
-   "whatsapp": 3
+   "anuncios": 9,
+   "whatsapp": 4
   },
   {
    "pais": "BR",
@@ -55,7 +55,7 @@
    "tipo": "all",
    "status": 200,
    "anuncios": 30,
-   "whatsapp": 3
+   "whatsapp": 4
   },
   {
    "pais": "BR",
@@ -63,7 +63,7 @@
    "tipo": "video",
    "status": 200,
    "anuncios": 30,
-   "whatsapp": 7
+   "whatsapp": 6
   },
   {
    "pais": "BR",
@@ -102,7 +102,7 @@
    "palavra": "apostila",
    "tipo": "all",
    "status": 200,
-   "anuncios": 29,
+   "anuncios": 27,
    "whatsapp": 13
   },
   {
@@ -110,16 +110,16 @@
    "palavra": "apostila",
    "tipo": "video",
    "status": 200,
-   "anuncios": 30,
-   "whatsapp": 15
+   "anuncios": 29,
+   "whatsapp": 14
   },
   {
    "pais": "BR",
    "palavra": "apostila",
    "tipo": "image",
    "status": 200,
-   "anuncios": 20,
-   "whatsapp": 1
+   "anuncios": 21,
+   "whatsapp": 2
   },
   {
    "pais": "BR",
@@ -142,7 +142,7 @@
    "palavra": "material em PDF",
    "tipo": "image",
    "status": 200,
-   "anuncios": 21,
+   "anuncios": 15,
    "whatsapp": 3
   },
   {
@@ -150,8 +150,8 @@
    "palavra": "passo a passo PDF",
    "tipo": "all",
    "status": 200,
-   "anuncios": 28,
-   "whatsapp": 10
+   "anuncios": 27,
+   "whatsapp": 9
   },
   {
    "pais": "BR",
@@ -159,7 +159,7 @@
    "tipo": "video",
    "status": 200,
    "anuncios": 28,
-   "whatsapp": 11
+   "whatsapp": 10
   },
   {
    "pais": "BR",
@@ -167,7 +167,7 @@
    "tipo": "image",
    "status": 200,
    "anuncios": 25,
-   "whatsapp": 0
+   "whatsapp": 1
   },
   {
    "pais": "BR",
@@ -183,14 +183,14 @@
    "tipo": "video",
    "status": 200,
    "anuncios": 30,
-   "whatsapp": 9
+   "whatsapp": 7
   },
   {
    "pais": "BR",
    "palavra": "guia completo",
    "tipo": "image",
    "status": 200,
-   "anuncios": 18,
+   "anuncios": 20,
    "whatsapp": 0
   },
   {
@@ -223,7 +223,7 @@
    "tipo": "all",
    "status": 200,
    "anuncios": 29,
-   "whatsapp": 7
+   "whatsapp": 8
   },
   {
    "pais": "BR",
@@ -231,15 +231,15 @@
    "tipo": "video",
    "status": 200,
    "anuncios": 29,
-   "whatsapp": 10
+   "whatsapp": 11
   },
   {
    "pais": "BR",
    "palavra": "material digital",
    "tipo": "image",
    "status": 200,
-   "anuncios": 22,
-   "whatsapp": 5
+   "anuncios": 23,
+   "whatsapp": 2
   },
   {
    "pais": "MX",
@@ -247,7 +247,7 @@
    "tipo": "all",
    "status": 200,
    "anuncios": 30,
-   "whatsapp": 7
+   "whatsapp": 6
   },
   {
    "pais": "MX",
@@ -271,7 +271,7 @@
    "tipo": "all",
    "status": 200,
    "anuncios": 30,
-   "whatsapp": 13
+   "whatsapp": 12
   },
   {
    "pais": "MX",
@@ -279,7 +279,7 @@
    "tipo": "video",
    "status": 200,
    "anuncios": 30,
-   "whatsapp": 13
+   "whatsapp": 14
   },
   {
    "pais": "MX",
@@ -287,23 +287,23 @@
    "tipo": "image",
    "status": 200,
    "anuncios": 30,
-   "whatsapp": 1
+   "whatsapp": 2
   },
   {
    "pais": "MX",
    "palavra": "recibe primero",
    "tipo": "all",
    "status": 200,
-   "anuncios": 26,
-   "whatsapp": 11
+   "anuncios": 27,
+   "whatsapp": 10
   },
   {
    "pais": "MX",
    "palavra": "recibe primero",
    "tipo": "video",
    "status": 200,
-   "anuncios": 27,
-   "whatsapp": 12
+   "anuncios": 28,
+   "whatsapp": 13
   },
   {
    "pais": "MX",
@@ -335,7 +335,7 @@
    "tipo": "image",
    "status": 200,
    "anuncios": 30,
-   "whatsapp": 28
+   "whatsapp": 30
   },
   {
    "pais": "MX",
@@ -358,8 +358,8 @@
    "palavra": "manual en PDF",
    "tipo": "image",
    "status": 200,
-   "anuncios": 13,
-   "whatsapp": 5
+   "anuncios": 12,
+   "whatsapp": 6
   },
   {
    "pais": "MX",
@@ -367,7 +367,7 @@
    "tipo": "all",
    "status": 200,
    "anuncios": 29,
-   "whatsapp": 27
+   "whatsapp": 26
   },
   {
    "pais": "MX",
@@ -382,8 +382,8 @@
    "palavra": "paso a paso PDF",
    "tipo": "image",
    "status": 200,
-   "anuncios": 29,
-   "whatsapp": 27
+   "anuncios": 30,
+   "whatsapp": 28
   },
   {
    "pais": "MX",
@@ -391,7 +391,7 @@
    "tipo": "all",
    "status": 200,
    "anuncios": 30,
-   "whatsapp": 2
+   "whatsapp": 3
   },
   {
    "pais": "MX",
@@ -423,14 +423,14 @@
    "tipo": "video",
    "status": 200,
    "anuncios": 30,
-   "whatsapp": 26
+   "whatsapp": 27
   },
   {
    "pais": "MX",
    "palavra": "material digital",
    "tipo": "image",
    "status": 200,
-   "anuncios": 20,
+   "anuncios": 27,
    "whatsapp": 9
   },
   {
@@ -447,7 +447,7 @@
    "tipo": "video",
    "status": 200,
    "anuncios": 29,
-   "whatsapp": 21
+   "whatsapp": 19
   },
   {
    "pais": "MX",
@@ -456,10 +456,236 @@
    "status": 200,
    "anuncios": 3,
    "whatsapp": 2
+  },
+  {
+   "pais": "BR",
+   "palavra": "curso de eletricista",
+   "tipo": "all",
+   "conc": "eletrica",
+   "status": 200,
+   "anuncios": 30,
+   "whatsapp": 16
+  },
+  {
+   "pais": "BR",
+   "palavra": "instalações elétricas",
+   "tipo": "all",
+   "conc": "eletrica",
+   "status": 200,
+   "anuncios": 26,
+   "whatsapp": 8
+  },
+  {
+   "pais": "BR",
+   "palavra": "apostila de elétrica",
+   "tipo": "all",
+   "conc": "eletrica",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 18
+  },
+  {
+   "pais": "BR",
+   "palavra": "eletricista residencial",
+   "tipo": "all",
+   "conc": "eletrica",
+   "status": 200,
+   "anuncios": 25,
+   "whatsapp": 6
+  },
+  {
+   "pais": "BR",
+   "palavra": "elétrica passo a passo",
+   "tipo": "all",
+   "conc": "eletrica",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 6
+  },
+  {
+   "pais": "BR",
+   "palavra": "18 instalações",
+   "tipo": "all",
+   "conc": "eletrica",
+   "status": 200,
+   "anuncios": 27,
+   "whatsapp": 15
+  },
+  {
+   "pais": "BR",
+   "palavra": "elétrica residencial",
+   "tipo": "all",
+   "conc": "eletrica",
+   "status": 200,
+   "anuncios": 25,
+   "whatsapp": 8
+  },
+  {
+   "pais": "BR",
+   "palavra": "instalações elétricas passo a passo",
+   "tipo": "all",
+   "conc": "eletrica",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 17
+  },
+  {
+   "pais": "BR",
+   "palavra": "comandos elétricos",
+   "tipo": "all",
+   "conc": "comandos",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 10
+  },
+  {
+   "pais": "BR",
+   "palavra": "apostila de comandos",
+   "tipo": "all",
+   "conc": "comandos",
+   "status": 200,
+   "anuncios": 28,
+   "whatsapp": 20
+  },
+  {
+   "pais": "BR",
+   "palavra": "partida estrela triângulo",
+   "tipo": "all",
+   "conc": "comandos",
+   "status": 200,
+   "anuncios": 18,
+   "whatsapp": 6
+  },
+  {
+   "pais": "BR",
+   "palavra": "contator",
+   "tipo": "all",
+   "conc": "comandos",
+   "status": 200,
+   "anuncios": 25,
+   "whatsapp": 15
+  },
+  {
+   "pais": "BR",
+   "palavra": "apostila de comandos elétricos",
+   "tipo": "all",
+   "conc": "comandos",
+   "status": 200,
+   "anuncios": 28,
+   "whatsapp": 26
+  },
+  {
+   "pais": "BR",
+   "palavra": "parede marmorizada",
+   "tipo": "all",
+   "conc": "parede",
+   "status": 200,
+   "anuncios": 24,
+   "whatsapp": 21
+  },
+  {
+   "pais": "BR",
+   "palavra": "efeito mármore",
+   "tipo": "all",
+   "conc": "parede",
+   "status": 200,
+   "anuncios": 28,
+   "whatsapp": 9
+  },
+  {
+   "pais": "BR",
+   "palavra": "acabamentos de luxo",
+   "tipo": "all",
+   "conc": "parede",
+   "status": 200,
+   "anuncios": 26,
+   "whatsapp": 7
+  },
+  {
+   "pais": "BR",
+   "palavra": "cimento queimado",
+   "tipo": "all",
+   "conc": "parede",
+   "status": 200,
+   "anuncios": 27,
+   "whatsapp": 7
+  },
+  {
+   "pais": "BR",
+   "palavra": "textura de parede",
+   "tipo": "all",
+   "conc": "parede",
+   "status": 200,
+   "anuncios": 29,
+   "whatsapp": 3
+  },
+  {
+   "pais": "BR",
+   "palavra": "parede marmorizada",
+   "tipo": "all",
+   "conc": "parede",
+   "status": 200,
+   "anuncios": 24,
+   "whatsapp": 21
+  },
+  {
+   "pais": "BR",
+   "palavra": "acabamentos de luxo",
+   "tipo": "all",
+   "conc": "parede",
+   "status": 200,
+   "anuncios": 26,
+   "whatsapp": 7
+  },
+  {
+   "pais": "BR",
+   "palavra": "receitas de sushi",
+   "tipo": "all",
+   "conc": "sushi",
+   "status": 200,
+   "anuncios": 28,
+   "whatsapp": 5
+  },
+  {
+   "pais": "BR",
+   "palavra": "sushi em casa",
+   "tipo": "all",
+   "conc": "sushi",
+   "status": 200,
+   "anuncios": 26,
+   "whatsapp": 7
+  },
+  {
+   "pais": "BR",
+   "palavra": "comida japonesa receitas",
+   "tipo": "all",
+   "conc": "sushi",
+   "status": 200,
+   "anuncios": 24,
+   "whatsapp": 4
+  },
+  {
+   "pais": "BR",
+   "palavra": "temaki",
+   "tipo": "all",
+   "conc": "sushi",
+   "status": 200,
+   "anuncios": 28,
+   "whatsapp": 5
+  },
+  {
+   "pais": "BR",
+   "palavra": "receitas de sushi",
+   "tipo": "all",
+   "conc": "sushi",
+   "status": 200,
+   "anuncios": 28,
+   "whatsapp": 5
   }
  ],
  "erros": [],
  "bloqueado": false,
- "anunciantes": 204,
- "contados": 120
+ "espionadas": 0,
+ "anunciantes": 285,
+ "contados": 160
 }
